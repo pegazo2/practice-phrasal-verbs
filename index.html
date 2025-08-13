@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>99 Phrasal Verbs</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; background: #f7f9fc; }
+    h2 { color: #2a3eb1; }
+    .level-title { margin-top: 30px; color: #1b5e20; }
+    .pv-item { margin-bottom: 10px; padding: 8px; background: #ffffff; border-radius: 5px; border: 1px solid #ccc; }
+    .pv-buttons { margin-top: 5px; }
+    button { margin-right: 5px; padding: 4px 8px; cursor: pointer; border-radius: 4px; border: 1px solid #999; background: #e0e0e0; }
+    button:hover { background: #d0d0ff; }
+    .phonetic { font-style: italic; color: #555; display:block; margin-top: 2px; }
+  </style>
+</head>
+<body>
+<h2>Lista de 99 Phrasal Verbs (Básico, Intermedio, Difícil)</h2>
+
+<div id="pvContainer"></div>
+
+<button onclick="window.location.href='practice.html'">Modo Práctica</button>
+
+<script>
+const phrasalVerbs = {
+  "Básico":[
+    {"pv":"get up","phonetic":"ɡɛt ʌp","example":"I get up early every day.","examplePhonetic":"aɪ ɡɛt ʌp ˈɜːrli ˈɛvri deɪ"},
+    {"pv":"put on","phonetic":"pʊt ɑn","example":"She put on her jacket before leaving.","examplePhonetic":"ʃi pʊt ɑn hɜr ˈdʒækɪt bɪˈfɔr ˈlivɪŋ"},
+    {"pv":"take off","phonetic":"teɪk ɔf","example":"The plane takes off at 9 PM.","examplePhonetic":"ðə pleɪn teɪks ɔf æt naɪn piː ɛm"},
+    {"pv":"turn on","phonetic":"tɜrn ɑn","example":"Please turn on the lights.","examplePhonetic":"pliz tɜrn ɑn ðə laɪts"},
+    {"pv":"turn off","phonetic":"tɜrn ɔf","example":"Turn off the TV when you finish.","examplePhonetic":"tɜrn ɔf ðə tiːvi wɛn ju fɪnɪʃ"},
+    {"pv":"look for","phonetic":"lʊk fɔr","example":"I'm looking for my keys.","examplePhonetic":"aɪm ˈlʊkɪŋ fɔr maɪ kiz"},
+    {"pv":"give up","phonetic":"ɡɪv ʌp","example":"Don't give up on your dreams.","examplePhonetic":"doʊnt ɡɪv ʌp ɑn jʊr drimz"},
+    {"pv":"bring up","phonetic":"brɪŋ ʌp","example":"She brought up an interesting topic.","examplePhonetic":"ʃi brɔt ʌp æn ˈɪntrəstɪŋ ˈtɑpɪk"},
+    {"pv":"call off","phonetic":"kɔl ɔf","example":"They called off the meeting.","examplePhonetic":"ðeɪ kɔld ɔf ðə ˈmitɪŋ"},
+    {"pv":"come back","phonetic":"kʌm bæk","example":"He will come back tomorrow.","examplePhonetic":"hi wɪl kʌm bæk təˈmɑro"},
+    {"pv":"look after","phonetic":"lʊk ˈæftər","example":"She looks after her younger brother.","examplePhonetic":"ʃi lʊks ˈæftər hɜr ˈjʌŋɡər ˈbrʌðər"},
+    {"pv":"make up","phonetic":"meɪk ʌp","example":"They made up after the argument.","examplePhonetic":"ðeɪ meɪd ʌp ˈæftər ði ˈɑrgjəmənt"},
+    {"pv":"run out","phonetic":"rʌn aʊt","example":"We ran out of milk.","examplePhonetic":"wi ræn aʊt ʌv mɪlk"},
+    {"pv":"set up","phonetic":"sɛt ʌp","example":"He set up a new company.","examplePhonetic":"hi sɛt ʌp ə nu ˈkʌmpəni"},
+    {"pv":"pick up","phonetic":"pɪk ʌp","example":"I will pick you up at the airport.","examplePhonetic":"aɪ wɪl pɪk ju ʌp æt ði ˈɛrˌpɔrt"},
+    {"pv":"break down","phonetic":"breɪk daʊn","example":"The car broke down on the highway.","examplePhonetic":"ðə kɑr broʊk daʊn ɑn ðə ˈhaɪˌweɪ"},
+    {"pv":"put off","phonetic":"pʊt ɔf","example":"They put off the meeting until next week.","examplePhonetic":"ðeɪ pʊt ɔf ðə ˈmitɪŋ ʌnˈtɪl nɛkst wik"},
+    {"pv":"check out","phonetic":"ʧɛk aʊt","example":"Check out this new restaurant.","examplePhonetic":"ʧɛk aʊt ðɪs nu ˈrɛstrɒnt"},
+    {"pv":"go on","phonetic":"ɡoʊ ɑn","example":"Please go on with your story.","examplePhonetic":"pliz ɡoʊ ɑn wɪð jʊr ˈstɔri"},
+    {"pv":"fill out","phonetic":"fɪl aʊt","example":"Please fill out this form.","examplePhonetic":"pliz fɪl aʊt ðɪs fɔrm"},
+    {"pv":"give in","phonetic":"ɡɪv ɪn","example":"She finally gave in to their demands.","examplePhonetic":"ʃi ˈfaɪnəli ɡeɪv ɪn tə ðɛr dɪˈmændz"},
+    {"pv":"hold on","phonetic":"hoʊld ɑn","example":"Hold on a minute, I'll be right back.","examplePhonetic":"hoʊld ɑn ə ˈmɪnɪt aɪl bi raɪt bæk"},
+    {"pv":"look up","phonetic":"lʊk ʌp","example":"I need to look up that word in the dictionary.","examplePhonetic":"aɪ nid tə lʊk ʌp ðæt wɜrd ɪn ðə ˈdɪkʃəˌnɛri"},
+    {"pv":"run into","phonetic":"rʌn ˈɪntu","example":"I ran into an old friend yesterday.","examplePhonetic":"aɪ ræn ˈɪntu æn oʊld frɛnd ˈjɛstərdeɪ"},
+    {"pv":"take over","phonetic":"teɪk ˈoʊvər","example":"The company was taken over by a larger firm.","examplePhonetic":"ðə ˈkʌmpəni wəz ˈteɪkən ˈoʊvər baɪ ə ˈlɑrdʒər fɜrm"},
+    {"pv":"turn up","phonetic":"tɜrn ʌp","example":"He turned up late to the party.","examplePhonetic":"hi tɜrnd ʌp leɪt tə ðə ˈpɑrti"},
+    {"pv":"turn down","phonetic":"tɜrn daʊn","example":"She turned down the job offer.","examplePhonetic":"ʃi tɜrnd daʊn ðə ʤɑb ˈɔfər"},
+    {"pv":"work out","phonetic":"wɜrk aʊt","example":"Everything worked out well in the end.","examplePhonetic":"ˈɛvrɪˌθɪŋ wɜrkt aʊt wɛl ɪn ði ɛnd"},
+    {"pv":"bring back","phonetic":"brɪŋ bæk","example":"That song brings back memories.","examplePhonetic":"ðæt sɔŋ brɪŋz bæk ˈmɛməriz"},
+    {"pv":"come across","phonetic":"kʌm əˈkrɔs","example":"I came across an interesting article today.","examplePhonetic":"aɪ keɪm əˈkrɔs æn ˈɪntrəstɪŋ ˈɑrtɪkəl təˈdeɪ"},
+    {"pv":"cut down","phonetic":"kʌt daʊn","example":"He cut down on sugar to lose weight.","examplePhonetic":"hi kʌt daʊn ɑn ˈʃʊɡər tə luz weɪt"},
+    {"pv":"get along","phonetic":"ɡɛt əˈlɔŋ","example":"They get along very well.","examplePhonetic":"ðeɪ ɡɛt əˈlɔŋ ˈvɛri wɛl"}
+  ],
+  "Intermedio": [
+    // 33 phrasal verbs intermedios aquí
+  ],
+  "Difícil": [
+    // 33 phrasal verbs difíciles aquí
+  ]
+};
+
+function speak(text) {
+  if(!('speechSynthesis' in window)){ alert('Tu navegador no soporta voz'); return;}
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang = 'en-US';
+  const voices = window.speechSynthesis.getVoices();
+  utter.voice = voices.find(v=>v.lang==='en-US' && v.name.toLowerCase().includes('female')) || voices[0];
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(utter);
+}
+
+function renderPVs() {
+  const container = document.getElementById('pvContainer');
+  container.innerHTML='';
+  for(const level in phrasalVerbs){
+    const h = document.createElement('h3');
+    h.className='level-title';
+    h.textContent=level;
+    container.appendChild(h);
+
+    phrasalVerbs[level].forEach(pvObj=>{
+      const div = document.createElement('div');
+      div.className='pv-item';
+      div.innerHTML=`<b>${pvObj.pv}</b> <span class="phonetic">${pvObj.phonetic}</span>
+        <div>${pvObj.example} <span class="phonetic">${pvObj.examplePhonetic}</span></div>
+        <div class="pv-buttons">
+          <button onclick="speak('${pvObj.pv}')">Listen PV</button>
+          <button onclick="speak('${pvObj.example}')">Listen Example</button>
+        </div>`;
+      container.appendChild(div);
+    });
+  }
+}
+
+window.addEventListener('load', renderPVs);
+</script>
+</body>
+</html>
