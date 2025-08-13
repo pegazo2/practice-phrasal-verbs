@@ -1,230 +1,198 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Phrasal Verbs Trainer</title>
-<style>
-body {
-  font-family: Arial, sans-serif;
-  margin: 20px;
-  background: #f7f9fc;
-  color: #333;
-}
-h2 { color: #2a3eb1; }
-section { margin-top: 20px; padding: 15px; background: #fff; border-radius: 8px; border: 1px solid #ccc; }
-.phrasal-item { margin-bottom: 12px; padding: 8px; background: #f0f8ff; border-radius: 5px; display: flex; flex-direction: column; }
-.phrasal-header { display: flex; justify-content: space-between; align-items: center; }
-.phrasal-header b { font-size: 18px; }
-.phrasal-header span { font-style: italic; color: #555; margin-left: 10px; }
-.phrasal-buttons { margin-top: 5px; }
-button { margin: 2px; padding: 5px 8px; cursor: pointer; border-radius: 4px; border: 1px solid #999; background: #e0e0e0; }
-button:hover { background: #d0d0ff; }
-.phrasal-phonetic { margin-top: 2px; font-size: 14px; color: #222; font-family: monospace; }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Phrasal Verbs Trainer - 99 PV</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background: #f7f9fc;
+      color: #333;
+    }
+    h2 { text-align:center; }
+    .phrasal-item {
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+      background: #fff;
+    }
+    .phrasal-header b { font-size: 1.1em; }
+    .phrasal-phonetic { font-style: italic; margin-top: 5px; }
+    .phrasal-buttons button {
+      margin-right: 10px;
+      margin-top: 5px;
+      padding: 5px 10px;
+    }
+  </style>
 </head>
 <body>
-<h2>🎓 Phrasal Verbs Trainer</h2>
-<button onclick="toggleVoice()">Cambiar Voz: Mujer/Hombre</button>
-<p>Voz actual: <span id="voiceName">Femenina (default)</span></p>
+  <h2>Phrasal Verbs Trainer - 99 PV</h2>
+  <div id="phrasalVerbsContainer"></div>
 
-<section id="phrasalVerbsContainer"></section>
+  <script>
+    // --- 99 Phrasal verbs ---
+    const phrasalVerbsData = [
+      {pv:"look around", meaning:"Mirar alrededor", phonetic:"/lʊk əˈraʊnd/", example:"Look around the city.", examplePhon:"/lʊk əˈraʊnd ðə ˈsɪti/"},
+      {pv:"pull over", meaning:"Detenerse a un lado", phonetic:"/pʊl ˈoʊvər/", example:"The police officer told him to pull over.", examplePhon:"/ðə pəˈlis ˈɒfəsər toʊld hɪm tu pʊl ˈoʊvər/"},
+      {pv:"set aside", meaning:"Apartar", phonetic:"/sɛt əˈsaɪd/", example:"He set aside some money for vacation.", examplePhon:"/hi sɛt əˈsaɪd sʌm ˈmʌni fɔr veɪˈkeɪʃən/"},
+      {pv:"show off", meaning:"Presumir", phonetic:"/ʃoʊ ɒf/", example:"He always shows off his new car.", examplePhon:"/hi ˈɔlweɪz ʃoʊz ɒf hɪz nu kɑr/"},
+      {pv:"take up", meaning:"Empezar actividad", phonetic:"/teɪk ʌp/", example:"She took up tennis recently.", examplePhon:"/ʃi tʊk ʌp ˈtɛnɪs ˈrisəntli/"},
+      {pv:"turn back", meaning:"Volverse", phonetic:"/tɜrn bæk/", example:"We had to turn back due to rain.", examplePhon:"/wi hæd tu tɜrn bæk du tu reɪn/"},
+      {pv:"work on", meaning:"Trabajar en", phonetic:"/wɜrk ɒn/", example:"I'm working on a new project.", examplePhon:"/aɪm ˈwɜrkɪŋ ɒn ə nu ˈprɑʤɛkt/"},
+      {pv:"break into", meaning:"Entrar forzando", phonetic:"/breɪk ˈɪntu/", example:"Thieves broke into the house.", examplePhon:"/θivz broʊk ˈɪntu ðə haʊs/"},
+      {pv:"come off", meaning:"Salir bien", phonetic:"/kʌm ɒf/", example:"The plan came off perfectly.", examplePhon:"/ðə plæn keɪm ɒf ˈpɜrfɪktli/"},
+      {pv:"go back on", meaning:"Romper promesa", phonetic:"/ɡoʊ bæk ɒn/", example:"He went back on his word.", examplePhon:"/hi wɛnt bæk ɒn hɪz wɜrd/"},
+      {pv:"hold back", meaning:"Contener", phonetic:"/hoʊld bæk/", example:"She couldn't hold back her tears.", examplePhon:"/ʃi ˈkʊdənt hoʊld bæk hɜr tɪərz/"},
+      {pv:"keep out", meaning:"Mantener fuera", phonetic:"/kip aʊt/", example:"Keep out of this room.", examplePhon:"/kip aʊt ʌv ðɪs rum/"},
+      {pv:"look in", meaning:"Visitar brevemente", phonetic:"/lʊk ɪn/", example:"I looked in on my friend.", examplePhon:"/aɪ lʊkt ɪn ɒn maɪ frɛnd/"},
+      {pv:"make out", meaning:"Distinguir/Entender", phonetic:"/meɪk aʊt/", example:"I can't make out the handwriting.", examplePhon:"/aɪ kænt meɪk aʊt ðə ˈhændˌraɪtɪŋ/"},
+      {pv:"run over", meaning:"Atropellar/Repasar", phonetic:"/rʌn ˈoʊvər/", example:"The car ran over the cat.", examplePhon:"/ðə kɑr ræn ˈoʊvər ðə kæt/"},
+      {pv:"show around", meaning:"Mostrar lugar", phonetic:"/ʃoʊ əˈraʊnd/", example:"He showed me around the city.", examplePhon:"/hi ʃoʊd mi əˈraʊnd ðə ˈsɪti/"},
+      {pv:"take out", meaning:"Sacar", phonetic:"/teɪk aʊt/", example:"He took out the trash.", examplePhon:"/hi tʊk aʊt ðə træʃ/"},
+      {pv:"turn over", meaning:"Dar vuelta", phonetic:"/tɜrn ˈoʊvər/", example:"Turn over the page.", examplePhon:"/tɜrn ˈoʊvər ðə peɪdʒ/"},
+      {pv:"watch out", meaning:"Tener cuidado", phonetic:"/wɑʧ aʊt/", example:"Watch out for the wet floor.", examplePhon:"/wɑʧ aʊt fɔr ðə wɛt flɔr/"},
+      {pv:"break out", meaning:"Estallar", phonetic:"/breɪk aʊt/", example:"A fire broke out in the kitchen.", examplePhon:"/ə faɪər broʊk aʊt ɪn ðə ˈkɪʧɪn/"},
+      {pv:"bring out", meaning:"Sacar a la luz", phonetic:"/brɪŋ aʊt/", example:"The teacher brought out the best in the students.", examplePhon:"/ðə ˈtiʧər brɔt aʊt ðə bɛst ɪn ðə ˈstudənts/"},
+      {pv:"carry out", meaning:"Llevar a cabo", phonetic:"/ˈkæri aʊt/", example:"They carried out the experiment.", examplePhon:"/ðeɪ ˈkæri aʊt ði ˌɛkspəˈrɪmənt/"},
+      {pv:"come along", meaning:"Acompañar/Avanzar", phonetic:"/kʌm əˈlɔŋ/", example:"Come along with us.", examplePhon:"/kʌm əˈlɔŋ wɪð ʌs/"},
+      {pv:"cut out", meaning:"Eliminar/Recortar", phonetic:"/kʌt aʊt/", example:"Cut out the unnecessary parts.", examplePhon:"/kʌt aʊt ði ˌʌnˈnɛsəˌsɛri pɑrts/"},
+      {pv:"account for", meaning:"Explicar/Justificar", phonetic:"/əˈkaʊnt fɔr/", example:"Can you account for your absence?", examplePhon:"/kæn ju əˈkaʊnt fɔr jʊr ˈæbsəns/"},
+      {pv:"add up", meaning:"Sumar/Tener sentido", phonetic:"/æd ʌp/", example:"His story doesn't add up.", examplePhon:"/hɪz ˈstɔri ˈdəzənt æd ʌp/"},
+      {pv:"back out", meaning:"Echarse atrás", phonetic:"/bæk aʊt/", example:"He backed out of the deal.", examplePhon:"/hi bækɪd aʊt ʌv ðə dil/"},
+      {pv:"bear with", meaning:"Tener paciencia", phonetic:"/bɛr wɪð/", example:"Please bear with me while I explain.", examplePhon:"/pliz bɛr wɪð mi waɪl aɪ ɪkˈspleɪn/"},
+      {pv:"break off", meaning:"Romper relación/Interrumpir", phonetic:"/breɪk ɒf/", example:"They broke off their engagement.", examplePhon:"/ðeɪ broʊk ɒf ðɛr ɪnˈɡeɪdʒmənt/"},
+      {pv:"bring forward", meaning:"Proponer/Adelantar", phonetic:"/brɪŋ ˈfɔrwərd/", example:"The meeting was brought forward to Monday.", examplePhon:"/ðə ˈmitɪŋ wəz brɔt ˈfɔrwərd tu ˈmʌnˌdeɪ/"},
+      {pv:"call in", meaning:"Llamar/Invitar", phonetic:"/kɔl ɪn/", example:"The manager called in the employees.", examplePhon:"/ðə ˈmænɪdʒər kɔld ɪn ði ɛmˈplɔɪiz/"},
+      {pv:"carry over", meaning:"Trasladar/Extender", phonetic:"/ˈkæri ˈoʊvər/", example:"The balance will carry over to next month.", examplePhon:"/ðə ˈbæləns wɪl ˈkæri ˈoʊvər tu nɛkst mʌnθ/"},
+      {pv:"check up on", meaning:"Verificar", phonetic:"/ʧɛk ʌp ɒn/", example:"I need to check up on my patients.", examplePhon:"/aɪ nid tu ʧɛk ʌp ɒn maɪ ˈpeɪʃənts/"},
+      {pv:"come forward", meaning:"Presentarse", phonetic:"/kʌm ˈfɔrwərd/", example:"Witnesses came forward with information.", examplePhon:"/ˈwɪtnəsɪz keɪm ˈfɔrwərd wɪð ˌɪnfərˈmeɪʃən/"},
+      {pv:"cut back", meaning:"Reducir", phonetic:"/kʌt bæk/", example:"They are cutting back on expenses.", examplePhon:"/ðeɪ ɑr ˈkʌtɪŋ bæk ɒn ɪkˈspɛnsɪz/"},
+      {pv:"do without", meaning:"Arreglárselas sin", phonetic:"/du wɪˈðaʊt/", example:"We can do without sugar for a while.", examplePhon:"/wi kæn du wɪˈðaʊt ˈʃʊɡər fɔr ə waɪl/"},
+      {pv:"draw up", meaning:"Redactar", phonetic:"/drɔ ʌp/", example:"They drew up a contract.", examplePhon:"/ðeɪ dru ʌp ə ˈkɑnˌtrækt/"},
+      {pv:"drop by", meaning:"Pasar por", phonetic:"/drɒp baɪ/", example:"I dropped by her office yesterday.", examplePhon:"/aɪ drɒpt baɪ hɜr ˈɒfɪs ˈjɛstərˌdeɪ/"},
+      {pv:"fall behind", meaning:"Quedarse atrás", phonetic:"/fɔl bɪˈhaɪnd/", example:"She fell behind in her studies.", examplePhon:"/ʃi fɛl bɪˈhaɪnd ɪn hɜr ˈstʌdiz/"},
+      {pv:"fill in", meaning:"Rellenar/Informar", phonetic:"/fɪl ɪn/", example:"Please fill in this form.", examplePhon:"/pliz fɪl ɪn ðɪs fɔrm/"},
+      {pv:"get over", meaning:"Superar", phonetic:"/ɡɛt ˈoʊvər/", example:"He got over his fear of heights.", examplePhon:"/hi ɡɑt ˈoʊvər hɪz fɪr ʌv haɪts/"},
+      {pv:"give off", meaning:"Emitir", phonetic:"/ɡɪv ɒf/", example:"The flowers give off a pleasant scent.", examplePhon:"/ðə ˈflaʊərz ɡɪv ɒf ə ˈplɛzənt sɛnt/"},
+      {pv:"go through", meaning:"Atravesar/Examinar", phonetic:"/ɡoʊ θru/", example:"She went through a difficult time.", examplePhon:"/ʃi wɛnt θru ə ˈdɪfəkəlt taɪm/"},
+      {pv:"hold up", meaning:"Retrasar/Sostener", phonetic:"/hoʊld ʌp/", example:"The traffic held us up.", examplePhon:"/ðə ˈtræfɪk hɛld ʌs ʌp/"},
+      {pv:"keep away", meaning:"Mantener alejado", phonetic:"/kip əˈweɪ/", example:"Keep away from dangerous animals.", examplePhon:"/kip əˈweɪ frɒm ˈdeɪndʒərəs ˈænəməlz/"},
+      {pv:"look down on", meaning:"Menospreciar", phonetic:"/lʊk daʊn ɒn/", example:"Don't look down on anyone.", examplePhon:"/doʊnt lʊk daʊn ɒn ˈɛniwʌn/"},
+      {pv:"make up for", meaning:"Compensar", phonetic:"/meɪk ʌp fɔr/", example:"She made up for her mistake.", examplePhon:"/ʃi meɪd ʌp fɔr hɜr mɪsˈteɪk/"},
+      {pv:"mix up", meaning:"Confundir", phonetic:"/mɪks ʌp/", example:"I mixed up the documents.", examplePhon:"/aɪ mɪkst ʌp ðə ˈdɑkjəmənts/"},
+      {pv:"pass out", meaning:"Desmayarse/Distribuir", phonetic:"/pæs aʊt/", example:"He passed out from exhaustion.", examplePhon:"/hi pæst aʊt frɒm ɪɡˈzɔsʧən/"},
+      {pv:"pull out", meaning:"Retirarse", phonetic:"/pʊl aʊt/", example:"The company pulled out of the deal.", examplePhon:"/ðə ˈkʌmpəni pʊld aʊt ʌv ðə dil/"},
+      {pv:"put up with", meaning:"Soportar", phonetic:"/pʊt ʌp wɪð/", example:"I can't put up with his behavior.", examplePhon:"/aɪ kænt pʊt ʌp wɪð hɪz bɪˈheɪvjər/"},
+      {pv:"run into", meaning:"Encontrarse con/Chocar", phonetic:"/rʌn ˈɪntu/", example:"I ran into an old friend yesterday.", examplePhon:"/aɪ ræn ˈɪntu æn oʊld frɛnd ˈjɛstərˌdeɪ/"},
+      {pv:"set off", meaning:"Partir/Activar", phonetic:"/sɛt ɒf/", example:"We set off early in the morning.", examplePhon:"/wi sɛt ɒf ˈɜrli ɪn ðə ˈmɔrnɪŋ/"},
+      {pv:"take over", meaning:"Tomar control", phonetic:"/teɪk ˈoʊvər/", example:"He took over the company.", examplePhon:"/hi tʊk ˈoʊvər ðə ˈkʌmpəni/"},
+      {pv:"throw away", meaning:"Tirar", phonetic:"/θroʊ əˈweɪ/", example:"Don't throw away your chance.", examplePhon:"/doʊnt θroʊ əˈweɪ jʊr ʧæns/"},
+      {pv:"turn down", meaning:"Rechazar/Bajar", phonetic:"/tɜrn daʊn/", example:"She turned down the job offer.", examplePhon:"/ʃi tɜrnd daʊn ðə ʤɑb ˈɔfər/"},
+      {pv:"use up", meaning:"Agotar", phonetic:"/jus ʌp/", example:"We used up all the sugar.", examplePhon:"/wi juzd ʌp ɔl ðə ˈʃʊɡər/"},
+      {pv:"wait on", meaning:"Atender", phonetic:"/weɪt ɒn/", example:"The waiter waited on us quickly.", examplePhon:"/ðə ˈweɪtər ˈweɪtɪd ɒn ʌs ˈkwɪkli/"},
+      {pv:"watch over", meaning:"Vigilar", phonetic:"/wɑʧ ˈoʊvər/", example:"She watched over her little brother.", examplePhon:"/ʃi wɑʧt ˈoʊvər hɜr ˈlɪtl ˈbrʌðər/"},
+      {pv:"work out", meaning:"Ejercitar/Resolver", phonetic:"/wɜrk aʊt/", example:"Everything worked out in the end.", examplePhon:"/ˈɛvrɪˌθɪŋ wɜrkt aʊt ɪn ði ɛnd/"},
+      {pv:"wrap up", meaning:"Terminar/Envolver", phonetic:"/ræp ʌp/", example:"Let's wrap up the meeting.", examplePhon:"/lɛts ræp ʌp ðə ˈmitɪŋ/"},
+      {pv:"break down", meaning:"Averiar/Colapsar", phonetic:"/breɪk daʊn/", example:"The car broke down on the highway.", examplePhon:"/ðə kɑr broʊk daʊn ɒn ðə ˈhaɪˌweɪ/"},
+      {pv:"call off", meaning:"Cancelar", phonetic:"/kɔl ɒf/", example:"They called off the meeting.", examplePhon:"/ðeɪ kɔld ɒf ðə ˈmitɪŋ/"},
+      {pv:"check out", meaning:"Verificar/Salir", phonetic:"/ʧɛk aʊt/", example:"Check out this new app.", examplePhon:"/ʧɛk aʊt ðɪs nu æp/"},
+      {pv:"come across", meaning:"Encontrar por casualidad", phonetic:"/kʌm əˈkrɔs/", example:"I came across an interesting article.", examplePhon:"/aɪ keɪm əˈkrɔs æn ˈɪntrəstɪŋ ˈɑrtɪkəl/"},
+      {pv:"get along", meaning:"Llevarse bien", phonetic:"/ɡɛt əˈlɔŋ/", example:"They get along very well.", examplePhon:"/ðeɪ ɡɛt əˈlɔŋ ˈvɛri wɛl/"},
+      {pv:"go off", meaning:"Explotar/Sonar", phonetic:"/ɡoʊ ɒf/", example:"The alarm went off at 7 AM.", examplePhon:"/ði əˈlɑrm wɛnt ɒf æt sɛvən eɪˈɛm/"},
+      {pv:"hold on", meaning:"Esperar", phonetic:"/hoʊld ɒn/", example:"Hold on, I'll be right back.", examplePhon:"/hoʊld ɒn, aɪl bi raɪt bæk/"},
+      {pv:"keep on", meaning:"Continuar", phonetic:"/kip ɒn/", example:"Keep on trying.", examplePhon:"/kip ɒn ˈtraɪɪŋ/"},
+      {pv:"look up", meaning:"Buscar información", phonetic:"/lʊk ʌp/", example:"Look up the word in the dictionary.", examplePhon:"/lʊk ʌp ðə wɜrd ɪn ðə ˈdɪkʃəˌnɛri/"},
+      {pv:"put off", meaning:"Posponer", phonetic:"/pʊt ɒf/", example:"They put off the meeting until tomorrow.", examplePhon:"/ðeɪ pʊt ɒf ðə ˈmitɪŋ ənˈtɪl təˈmɑroʊ/"},
+      {pv:"set up", meaning:"Montar/Configurar", phonetic:"/sɛt ʌp/", example:"They set up a new company.", examplePhon:"/ðeɪ sɛt ʌp ə nu ˈkʌmpəni/"},
+      {pv:"take back", meaning:"Retirar lo dicho", phonetic:"/teɪk bæk/", example:"He took back his words.", examplePhon:"/hi tʊk bæk hɪz wɜrd/"},
+      {pv:"turn up", meaning:"Aparecer/Subir", phonetic:"/tɜrn ʌp/", example:"She turned up at the party.", examplePhon:"/ʃi tɜrnd ʌp æt ðə ˈpɑrti/"},
+      {pv:"write down", meaning:"Anotar", phonetic:"/raɪt daʊn/", example:"Write down your notes.", examplePhon:"/raɪt daʊn jʊr noʊts/"},
+      {pv:"come up with", meaning:"Inventar/Proponer", phonetic:"/kʌm ʌp wɪð/", example:"She came up with a great idea.", examplePhon:"/ʃi keɪm ʌp wɪð ə ɡreɪt aɪˈdiə/"},
+      {pv:"get back", meaning:"Regresar", phonetic:"/ɡɛt bæk/", example:"I'll get back to you later.", examplePhon:"/aɪl ɡɛt bæk tu ju ˈleɪtər/"},
+      {pv:"go out", meaning:"Salir", phonetic:"/ɡoʊ aʊt/", example:"We went out for dinner.", examplePhon:"/wi wɛnt aʊt fɔr ˈdɪnər/"},
+      {pv:"look after", meaning:"Cuidar", phonetic:"/lʊk ˈæftər/", example:"She looks after her little brother.", examplePhon:"/ʃi lʊks ˈæftər hɜr ˈlɪtl ˈbrʌðər/"},
+      {pv:"pick up", meaning:"Recoger/Aprender", phonetic:"/pɪk ʌp/", example:"I picked up some French while in Paris.", examplePhon:"/aɪ pɪkt ʌp sʌm frɛnʧ waɪl ɪn ˈpærɪs/"},
+      {pv:"run out of", meaning:"Quedarse sin", phonetic:"/rʌn aʊt ʌv/", example:"We ran out of milk.", examplePhon:"/wi ræn aʊt ʌv mɪlk/"},
+      {pv:"set off", meaning:"Hacer estallar/Partir", phonetic:"/sɛt ɒf/", example:"The fireworks set off at midnight.", examplePhon:"/ðə ˈfaɪərˌwɜrks sɛt ɒf æt ˈmɪdˌnaɪt/"},
+      {pv:"show up", meaning:"Presentarse", phonetic:"/ʃoʊ ʌp/", example:"He showed up late to the meeting.", examplePhon:"/hi ʃoʊd ʌp leɪt tu ðə ˈmitɪŋ/"},
+      {pv:"take off", meaning:"Despegar/Quitarse", phonetic:"/teɪk ɒf/", example:"The plane took off on time.", examplePhon:"/ðə pleɪn tʊk ɒf ɒn taɪm/"},
+      {pv:"turn off", meaning:"Apagar", phonetic:"/tɜrn ɒf/", example:"Turn off the lights.", examplePhon:"/tɜrn ɒf ðə laɪts/"},
+      {pv:"bring up", meaning:"Mencionar/Criar", phonetic:"/brɪŋ ʌp/", example:"She brought up an interesting point.", examplePhon:"/ʃi brɔt ʌp æn ˈɪntrəstɪŋ pɔɪnt/"},
+      {pv:"call up", meaning:"Llamar por teléfono", phonetic:"/kɔl ʌp/", example:"I called up my friend yesterday.", examplePhon:"/aɪ kɔld ʌp maɪ frɛnd ˈjɛstərˌdeɪ/"},
+      {pv:"check in", meaning:"Registrarse", phonetic:"/ʧɛk ɪn/", example:"We checked in at the hotel.", examplePhon:"/wi ʧɛkt ɪn æt ðə hoʊˈtɛl/"},
+      {pv:"come in", meaning:"Entrar", phonetic:"/kʌm ɪn/", example:"Come in and sit down.", examplePhon:"/kʌm ɪn ænd sɪt daʊn/"},
+      {pv:"cut off", meaning:"Cortar", phonetic:"/kʌt ɒf/", example:"They cut off the electricity.", examplePhon:"/ðeɪ kʌt ɒf ði ɪˌlɛkˈtrɪsɪti/"},
+      {pv:"get in", meaning:"Entrar/Llegar", phonetic:"/ɡɛt ɪn/", example:"Get in the car.", examplePhon:"/ɡɛt ɪn ðə kɑr/"},
+      {pv:"give up", meaning:"Rendirse", phonetic:"/ɡɪv ʌp/", example:"Never give up!", examplePhon:"/ˈnɛvər ɡɪv ʌp/"},
+      {pv:"go back", meaning:"Volver", phonetic:"/ɡoʊ bæk/", example:"We went back home.", examplePhon:"/wi wɛnt bæk hoʊm/"},
+      {pv:"go on", meaning:"Continuar/Suceder", phonetic:"/ɡoʊ ɒn/", example:"Go on with your story.", examplePhon:"/ɡoʊ ɒn wɪð jʊr ˈstɔri/"},
+      {pv:"hold back", meaning:"Detener/Retener", phonetic:"/hoʊld bæk/", example:"He held back the crowd.", examplePhon:"/hi hɛld bæk ðə kraʊd/"},
+      {pv:"let down", meaning:"Decepcionar", phonetic:"/lɛt daʊn/", example:"Don't let me down.", examplePhon:"/doʊnt lɛt mi daʊn/"},
+      {pv:"look forward to", meaning:"Esperar con ganas", phonetic:"/lʊk ˈfɔrwərd tu/", example:"I look forward to the weekend.", examplePhon:"/aɪ lʊk ˈfɔrwərd tu ðə ˈwiˌkɛnd/"},
+      {pv:"make out", meaning:"Distinguir/Entender", phonetic:"/meɪk aʊt/", example:"I can't make out what he said.", examplePhon:"/aɪ kænt meɪk aʊt wʌt hi sɛd/"},
+      {pv:"pass away", meaning:"Fallecer", phonetic:"/pæs əˈweɪ/", example:"His grandfather passed away.", examplePhon:"/hɪz ˈgrændˌfɑðər pæs əˈweɪ/"},
+      {pv:"pay back", meaning:"Devolver dinero", phonetic:"/peɪ bæk/", example:"I'll pay you back tomorrow.", examplePhon:"/aɪl peɪ ju bæk təˈmɑroʊ/"},
+      {pv:"put down", meaning:"Escribir/Insultar", phonetic:"/pʊt daʊn/", example:"Put down your name here.", examplePhon:"/pʊt daʊn jʊr neɪm hɪr/"},
+      {pv:"put on", meaning:"Ponerse/Aumentar", phonetic:"/pʊt ɒn/", example:"He put on a jacket.", examplePhon:"/hi pʊt ɒn ə ˈʤækɪt/"},
+      {pv:"run away", meaning:"Huir", phonetic:"/rʌn əˈweɪ/", example:"The dog ran away.", examplePhon:"/ðə dɔg ræn əˈweɪ/"},
+      {pv:"show off", meaning:"Presumir", phonetic:"/ʃoʊ ɒf/", example:"She shows off her painting skills.", examplePhon:"/ʃi ʃoʊz ɒf hɜr ˈpeɪntɪŋ skɪlz/"},
+      {pv:"take after", meaning:"Parecerse a", phonetic:"/teɪk ˈæftər/", example:"She takes after her mother.", examplePhon:"/ʃi teɪks ˈæftər hɜr ˈmʌðər/"},
+      {pv:"turn around", meaning:"Dar la vuelta/Mejorar", phonetic:"/tɜrn əˈraʊnd/", example:"The company turned around its losses.", examplePhon:"/ðə ˈkʌmpəni tɜrnd əˈraʊnd ɪts ˈlɔsɪz/"},
+      {pv:"turn up", meaning:"Subir/Aparecer", phonetic:"/tɜrn ʌp/", example:"He turned up at the party unexpectedly.", examplePhon:"/hi tɜrnd ʌp æt ðə ˈpɑrti ˌʌnɪkˈspɛktɪdli/"}
+    ];
 
-<script>
-let englishVoiceFemale = null;
-let englishVoiceMale = null;
-let useMale = false;
+    // --- Cargar voces ---
+    let englishVoiceFemale;
+    function loadVoices(){
+      const voices = speechSynthesis.getVoices();
+      englishVoiceFemale = voices.find(v => v.lang === 'en-US' && v.name.toLowerCase().includes('female')) || voices[0];
+    }
+    speechSynthesis.onvoiceschanged = loadVoices;
+    window.onload = () => {
+      loadVoices();
+      renderPhrasalVerbs();
+    };
 
-const phrasalVerbsData = [
-  // 33 Básico
-  {pv:"get up", meaning:"Me levanto", phonetic:"/ɡɛt ʌp/", example:"I get up early every day.", examplePhon:"/aɪ ɡɛt ʌp ˈɜrli ˈɛvri deɪ/"},
-  {pv:"put on", meaning:"Ponerse", phonetic:"/pʊt ɒn/", example:"She put on her jacket before leaving.", examplePhon:"/ʃi pʊt ɒn hɜr ˈdʒækɪt bɪˈfɔr ˈlivɪŋ/"},
-  {pv:"take off", meaning:"Despegar/Quitar", phonetic:"/teɪk ɒf/", example:"The plane takes off at 9 PM.", examplePhon:"/ðə pleɪn teɪks ɒf æt naɪn pi ɛm/"},
-  {pv:"turn on", meaning:"Encender", phonetic:"/tɜrn ɒn/", example:"Please turn on the lights.", examplePhon:"/pliz tɜrn ɒn ðə laɪts/"},
-  {pv:"turn off", meaning:"Apagar", phonetic:"/tɜrn ɒf/", example:"Turn off the TV when you finish.", examplePhon:"/tɜrn ɒf ðə ˌtiːˈvi wɛn ju fɪnɪʃ/"},
-  {pv:"look for", meaning:"Buscar", phonetic:"/lʊk fɔr/", example:"I'm looking for my keys.", examplePhon:"/aɪm ˈlʊkɪŋ fɔr maɪ kiz/"},
-  {pv:"give up", meaning:"Rendirse", phonetic:"/ɡɪv ʌp/", example:"Don't give up on your dreams.", examplePhon:"/doʊnt ɡɪv ʌp ɒn jʊr drimz/"},
-  {pv:"bring up", meaning:"Mencionar", phonetic:"/brɪŋ ʌp/", example:"She brought up an interesting topic.", examplePhon:"/ʃi brɔt ʌp æn ˈɪntrəstɪŋ ˈtɑpɪk/"},
-  {pv:"call off", meaning:"Cancelar", phonetic:"/kɔl ɒf/", example:"They called off the meeting.", examplePhon:"/ðeɪ kɔld ɒf ðə ˈmitɪŋ/"},
-  {pv:"come back", meaning:"Regresar", phonetic:"/kʌm bæk/", example:"He will come back tomorrow.", examplePhon:"/hi wɪl kʌm bæk təˈmɑroʊ/"},
-  {pv:"look after", meaning:"Cuidar", phonetic:"/lʊk ˈæftər/", example:"She looks after her younger brother.", examplePhon:"/ʃi lʊks ˈæftər hɜr ˈjʌŋɡər ˈbrʌðər/"},
-  {pv:"make up", meaning:"Reconciliar", phonetic:"/meɪk ʌp/", example:"They made up after the argument.", examplePhon:"/ðeɪ meɪd ʌp ˈæftər ði ˈɑrɡjəmənt/"},
-  {pv:"run out", meaning:"Quedarse sin", phonetic:"/rʌn aʊt/", example:"We ran out of milk.", examplePhon:"/wi ræn aʊt ʌv mɪlk/"},
-  {pv:"set up", meaning:"Establecer", phonetic:"/sɛt ʌp/", example:"He set up a new company.", examplePhon:"/hi sɛt ʌp ə nu ˈkʌmpəni/"},
-  {pv:"pick up", meaning:"Recoger", phonetic:"/pɪk ʌp/", example:"I will pick you up at the airport.", examplePhon:"/aɪ wɪl pɪk ju ʌp æt ði ˈɛrˌpɔrt/"},
-  {pv:"break down", meaning:"Averiarse", phonetic:"/breɪk daʊn/", example:"The car broke down on the highway.", examplePhon:"/ðə kɑr broʊk daʊn ɒn ðə ˈhaɪˌweɪ/"},
-  {pv:"put off", meaning:"Posponer", phonetic:"/pʊt ɒf/", example:"They put off the meeting until next week.", examplePhon:"/ðeɪ pʊt ɒf ðə ˈmitɪŋ ʌnˈtɪl nɛkst wik/"},
-  {pv:"check out", meaning:"Revisar", phonetic:"/ʧɛk aʊt/", example:"Check out this new restaurant.", examplePhon:"/ʧɛk aʊt ðɪs nu ˈrɛstərɒnt/"},
-  {pv:"go on", meaning:"Continuar", phonetic:"/ɡoʊ ɒn/", example:"Please go on with your story.", examplePhon:"/pliz ɡoʊ ɒn wɪð jʊr ˈstɔri/"},
-  {pv:"fill out", meaning:"Rellenar", phonetic:"/fɪl aʊt/", example:"Please fill out this form.", examplePhon:"/pliz fɪl aʊt ðɪs fɔrm/"},
-  {pv:"give in", meaning:"Ceder", phonetic:"/ɡɪv ɪn/", example:"She finally gave in to their demands.", examplePhon:"/ʃi ˈfaɪnəli ɡeɪv ɪn tu ðɛr dɪˈmændz/"},
-  {pv:"hold on", meaning:"Esperar", phonetic:"/hoʊld ɒn/", example:"Hold on a minute, I'll be right back.", examplePhon:"/hoʊld ɒn ə ˈmɪnɪt, aɪl bi raɪt bæk/"},
-  {pv:"look up", meaning:"Buscar", phonetic:"/lʊk ʌp/", example:"I need to look up that word in the dictionary.", examplePhon:"/aɪ nid tu lʊk ʌp ðæt wɜrd ɪn ðə ˈdɪkʃəˌnɛri/"},
-  {pv:"run into", meaning:"Encontrarse con", phonetic:"/rʌn ˈɪntu/", example:"I ran into an old friend yesterday.", examplePhon:"/aɪ ræn ˈɪntu æn oʊld frɛnd ˈjɛstərˌdeɪ/"},
-  {pv:"take over", meaning:"Tomar control", phonetic:"/teɪk ˈoʊvər/", example:"The company was taken over by a larger firm.", examplePhon:"/ðə ˈkʌmpəni wəz ˈteɪkən ˈoʊvər baɪ ə ˈlɑrdʒər fɜrm/"},
-  {pv:"turn up", meaning:"Aparecer", phonetic:"/tɜrn ʌp/", example:"He turned up late to the party.", examplePhon:"/hi tɜrnd ʌp leɪt tu ðə ˈpɑrti/"},
-  {pv:"turn down", meaning:"Rechazar", phonetic:"/tɜrn daʊn/", example:"She turned down the job offer.", examplePhon:"/ʃi tɜrnd daʊn ðə ʤɑb ˈɔfər/"},
-  {pv:"work out", meaning:"Salir bien/Entrenar", phonetic:"/wɜrk aʊt/", example:"Everything worked out well in the end.", examplePhon:"/ˈɛvrɪˌθɪŋ wɜrkt aʊt wɛl ɪn ði ɛnd/"},
-  {pv:"bring back", meaning:"Recordar", phonetic:"/brɪŋ bæk/", example:"That song brings back memories.", examplePhon:"/ðæt sɔŋ brɪŋz bæk ˈmɛməriz/"},
-  {pv:"come across", meaning:"Toparse con", phonetic:"/kʌm əˈkrɔs/", example:"I came across an interesting article today.", examplePhon:"/aɪ keɪm əˈkrɔs æn ˈɪntrəstɪŋ ˈɑrtɪkəl təˈdeɪ/"},
-  {pv:"cut down", meaning:"Reducir", phonetic:"/kʌt daʊn/", example:"He cut down on sugar to lose weight.", examplePhon:"/hi kʌt daʊn ɒn ˈʃʊɡər tu luz weɪt/"},
-  {pv:"get along", meaning:"Llevarse bien", phonetic:"/ɡɛt əˈlɔŋ/", example:"They get along very well.", examplePhon:"/ðeɪ ɡɛt əˈlɔŋ ˈvɛri wɛl/"}
-  // --- 33 Intermedio ---
-  {pv:"back up", meaning:"Respaldar", phonetic:"/bæk ʌp/", example:"Don't forget to back up your files.", examplePhon:"/doʊnt fərˈɡɛt tu bæk ʌp jʊr faɪlz/"},
-  {pv:"blow up", meaning:"Explotar", phonetic:"/bloʊ ʌp/", example:"The bomb blew up in the warehouse.", examplePhon:"/ðə bɑm blu ʌp ɪn ðə ˈwɛrˌhaʊs/"},
-  {pv:"break up", meaning:"Terminar relación", phonetic:"/breɪk ʌp/", example:"They broke up after five years.", examplePhon:"/ðeɪ broʊk ʌp ˈæftər faɪv jɪrz/"},
-  {pv:"bring in", meaning:"Introducir", phonetic:"/brɪŋ ɪn/", example:"The company brought in new regulations.", examplePhon:"/ðə ˈkʌmpəni brɔt ɪn nu ˌrɛɡjʊˈleɪʃənz/"},
-  {pv:"call up", meaning:"Llamar", phonetic:"/kɔl ʌp/", example:"I called up my friend yesterday.", examplePhon:"/aɪ kɔld ʌp maɪ frɛnd ˈjɛstərˌdeɪ/"},
-  {pv:"carry on", meaning:"Continuar", phonetic:"/ˈkæri ɒn/", example:"Carry on with your work.", examplePhon:"/ˈkæri ɒn wɪð jʊr wɜrk/"},
-  {pv:"come in", meaning:"Entrar", phonetic:"/kʌm ɪn/", example:"Please come in and sit down.", examplePhon:"/pliz kʌm ɪn ænd sɪt daʊn/"},
-  {pv:"come out", meaning:"Salir", phonetic:"/kʌm aʊt/", example:"The new movie comes out next week.", examplePhon:"/ðə nu ˈmuvi kʌmz aʊt nɛkst wik/"},
-  {pv:"cut off", meaning:"Cortar suministro", phonetic:"/kʌt ɒf/", example:"They cut off the electricity.", examplePhon:"/ðeɪ kʌt ɒf ði ɪˌlɛkˈtrɪsəti/"},
-  {pv:"drop off", meaning:"Dejar a alguien", phonetic:"/drɒp ɒf/", example:"I will drop you off at school.", examplePhon:"/aɪ wɪl drɒp ju ɒf æt skul/"},
-  {pv:"figure out", meaning:"Descifrar", phonetic:"/ˈfɪɡjər aʊt/", example:"I can't figure out this problem.", examplePhon:"/aɪ kænt ˈfɪɡjər aʊt ðɪs ˈprɑbləm/"},
-  {pv:"find out", meaning:"Descubrir", phonetic:"/faɪnd aʊt/", example:"I found out the truth yesterday.", examplePhon:"/aɪ faʊnd aʊt ðə truθ ˈjɛstərˌdeɪ/"},
-  {pv:"get back", meaning:"Regresar", phonetic:"/ɡɛt bæk/", example:"I need to get back home early.", examplePhon:"/aɪ nid tu ɡɛt bæk hoʊm ˈɜrli/"},
-  {pv:"give out", meaning:"Distribuir", phonetic:"/ɡɪv aʊt/", example:"They gave out free samples.", examplePhon:"/ðeɪ ɡeɪv aʊt fri ˈsæmpəlz/"},
-  {pv:"go back", meaning:"Regresar", phonetic:"/ɡoʊ bæk/", example:"I want to go back to that restaurant.", examplePhon:"/aɪ wɑnt tu ɡoʊ bæk tu ðæt ˈrɛstərɒnt/"},
-  {pv:"hang up", meaning:"Colgar", phonetic:"/hæŋ ʌp/", example:"He hung up the phone.", examplePhon:"/hi hʌŋ ʌp ðə foʊn/"},
-  {pv:"keep on", meaning:"Seguir haciendo", phonetic:"/kip ɒn/", example:"Keep on practicing every day.", examplePhon:"/kip ɒn ˈpræktɪsɪŋ ˈɛvri deɪ/"},
-  {pv:"let down", meaning:"Decepcionar", phonetic:"/lɛt daʊn/", example:"I don't want to let you down.", examplePhon:"/aɪ doʊnt wɑnt tu lɛt ju daʊn/"},
-  {pv:"look out", meaning:"Tener cuidado", phonetic:"/lʊk aʊt/", example:"Look out! There's a car coming.", examplePhon:"/lʊk aʊt ðɛrz ə kɑr ˈkʌmɪŋ/"},
-  {pv:"move on", meaning:"Seguir adelante", phonetic:"/muv ɒn/", example:"It's time to move on from the past.", examplePhon:"/ɪts taɪm tu muv ɒn frɒm ðə pæst/"},
-  {pv:"pay back", meaning:"Devolver dinero", phonetic:"/peɪ bæk/", example:"I will pay you back tomorrow.", examplePhon:"/aɪ wɪl peɪ ju bæk təˈmɑroʊ/"},
-  {pv:"put away", meaning:"Guardar", phonetic:"/pʊt əˈweɪ/", example:"Please put away your toys.", examplePhon:"/pliz pʊt əˈweɪ jʊr tɔɪz/"},
-  {pv:"set off", meaning:"Partir/Iniciar viaje", phonetic:"/sɛt ɒf/", example:"We set off early in the morning.", examplePhon:"/wi sɛt ɒf ˈɜrli ɪn ðə ˈmɔrnɪŋ/"},
-  {pv:"show up", meaning:"Aparecer", phonetic:"/ʃoʊ ʌp/", example:"He didn't show up to the meeting.", examplePhon:"/hi ˈdɪdənt ʃoʊ ʌp tu ðə ˈmitɪŋ/"},
-  {pv:"take back", meaning:"Retirar lo dicho", phonetic:"/teɪk bæk/", example:"I take back what I said.", examplePhon:"/aɪ teɪk bæk wʌt aɪ sɛd/"},
-  {pv:"turn around", meaning:"Dar la vuelta", phonetic:"/tɜrn əˈraʊnd/", example:"Turn around and look at me.", examplePhon:"/tɜrn əˈraʊnd ænd lʊk æt mi/"},
-  {pv:"use up", meaning:"Agotar", phonetic:"/jus ʌp/", example:"We used up all the sugar.", examplePhon:"/wi juzd ʌp ɔl ðə ˈʃʊɡər/"},
-  {pv:"wake up", meaning:"Despertarse", phonetic:"/weɪk ʌp/", example:"I wake up at 7 AM.", examplePhon:"/aɪ weɪk ʌp æt sɛvən eɪ ɛm/"},
-  {pv:"write down", meaning:"Escribir", phonetic:"/raɪt daʊn/", example:"Please write down the address.", examplePhon:"/pliz raɪt daʊn ði əˈdrɛs/"},
-  {pv:"call back", meaning:"Devolver llamada", phonetic:"/kɔl bæk/", example:"I will call you back later.", examplePhon:"/aɪ wɪl kɔl ju bæk ˈleɪtər/"},
-  {pv:"check in", meaning:"Registrarse", phonetic:"/ʧɛk ɪn/", example:"We checked in at the hotel.", examplePhon:"/wi ʧɛkt ɪn æt ðə hoʊˈtɛl/"},
-  {pv:"come up", meaning:"Surgir", phonetic:"/kʌm ʌp/", example:"A problem came up yesterday.", examplePhon:"/ə ˈprɑbləm keɪm ʌp ˈjɛstərˌdeɪ/"},
-  {pv:"get out", meaning:"Salir", phonetic:"/ɡɛt aʊt/", example:"Get out of the room!", examplePhon:"/ɡɛt aʊt ʌv ðə rum/"},
-  {pv:"go off", meaning:"Explotar/Sonar alarma", phonetic:"/ɡoʊ ɒf/", example:"The alarm went off at 6 AM.", examplePhon:"/ði əˈlɑrm wɛnt ɒf æt sɪks eɪ ɛm/"},
-  {pv:"keep up", meaning:"Mantener ritmo", phonetic:"/kip ʌp/", example:"Keep up the good work.", examplePhon:"/kip ʌp ðə ɡʊd wɜrk/"},
-  {pv:"look back", meaning:"Recordar", phonetic:"/lʊk bæk/", example:"Don't look back at your mistakes.", examplePhon:"/doʊnt lʊk bæk æt jʊr mɪsˈteɪks/"},
-  {pv:"run away", meaning:"Huir", phonetic:"/rʌn əˈweɪ/", example:"The thief ran away.", examplePhon:"/ðə θif ræn əˈweɪ/"},
-  {pv:"take on", meaning:"Asumir responsabilidad", phonetic:"/teɪk ɒn/", example:"She took on new duties.", examplePhon:"/ʃi tʊk ɒn nu ˈdutiz/"},
-  {pv:"turn in", meaning:"Entregar", phonetic:"/tɜrn ɪn/", example:"Please turn in your homework.", examplePhon:"/pliz tɜrn ɪn jʊr ˈhoʊmwɜrk/"},
-  {pv:"turn out", meaning:"Resultar", phonetic:"/tɜrn aʊt/", example:"The event turned out well.", examplePhon:"/ði ɪˈvɛnt tɜrnd aʊt wɛl/"},
-  {pv:"come down", meaning:"Bajar", phonetic:"/kʌm daʊn/", example:"The price came down.", examplePhon:"/ðə praɪs keɪm daʊn/"},
-  {pv:"get in", meaning:"Entrar", phonetic:"/ɡɛt ɪn/", example:"I got in the car.", examplePhon:"/aɪ ɡɑt ɪn ðə kɑr/"},
-  {pv:"give away", meaning:"Regalar", phonetic:"/ɡɪv əˈweɪ/", example:"They gave away free tickets.", examplePhon:"/ðeɪ ɡeɪv əˈweɪ fri ˈtɪkɪts/"},
-  {pv:"look around", meaning:"Mirar alrededor", phonetic:"/lʊk əˈraʊnd/", example:"Look around the city.", examplePhon:"/lʊk əˈraʊnd ðə ˈsɪti/"},
-  {pv:"pull over", meaning:"Detenerse a un lado", phonetic:"/pʊl ˈoʊvər/", example:"The police officer told him to pull over.", examplePhon:"/ðə pəˈlis ˈɒfəsər toʊld hɪm tu pʊl ˈoʊvər/"},
-  {pv:"set aside", meaning:"Apartar", phonetic:"/sɛt əˈsaɪd/", example:"He set aside some money for vacation.", examplePhon:"/hi sɛt əˈsaɪd sʌm ˈmʌni fɔr veɪˈkeɪʃən/"},
-  {pv:"show off", meaning:"Presumir", phonetic:"/ʃoʊ ɒf/", example:"He always shows off his new car.", examplePhon:"/hi ˈɔlweɪz ʃoʊz ɒf hɪz nu kɑr/"},
-  {pv:"take up", meaning:"Empezar actividad", phonetic:"/teɪk ʌp/", example:"She took up tennis recently.", examplePhon:"/ʃi tʊk ʌp ˈtɛnɪs ˈrisəntli/"},
-  {pv:"turn back", meaning:"Volverse", phonetic:"/tɜrn bæk/", example:"We had to turn back due to rain.", examplePhon:"/wi hæd tu tɜrn bæk du tu reɪn/"},
-  {pv:"work on", meaning:"Trabajar en", phonetic:"/wɜrk ɒn/", example:"I'm working on a new project.", examplePhon:"/aɪm ˈwɜrkɪŋ ɒn ə nu ˈprɑʤɛkt/"},
-  {pv:"break into", meaning:"Entrar forzando", phonetic:"/breɪk ˈɪntu/", example:"Thieves broke into the house.", examplePhon:"/θivz broʊk ˈɪntu ðə haʊs/"},
-  {pv:"come off", meaning:"Salir bien", phonetic:"/kʌm ɒf/", example:"The plan came off perfectly.", examplePhon:"/ðə plæn keɪm ɒf ˈpɜrfɪktli/"},
-  {pv:"go back on", meaning:"Romper promesa", phonetic:"/ɡoʊ bæk ɒn/", example:"He went back on his word.", examplePhon:"/hi wɛnt bæk ɒn hɪz wɜrd/"},
-  {pv:"hold back", meaning:"Contener", phonetic:"/hoʊld bæk/", example:"She couldn't hold back her tears.", examplePhon:"/ʃi ˈkʊdənt hoʊld bæk hɜr tɪərz/"},
-  {pv:"keep out", meaning:"Mantener fuera", phonetic:"/kip aʊt/", example:"Keep out of this room.", examplePhon:"/kip aʊt ʌv ðɪs rum/"}, 
-  {pv:"look in", meaning:"Visitar brevemente", phonetic:"/lʊk ɪn/", example:"I looked in on my friend.", examplePhon:"/aɪ lʊkt ɪn ɒn maɪ frɛnd/"},
-  {pv:"make out", meaning:"Distinguir/Entender", phonetic:"/meɪk aʊt/", example:"I can't make out the handwriting.", examplePhon:"/aɪ kænt meɪk aʊt ðə ˈhændˌraɪtɪŋ/"},
-  {pv:"run over", meaning:"Atropellar/Repasar", phonetic:"/rʌn ˈoʊvər/", example:"The car ran over the cat.", examplePhon:"/ðə kɑr ræn ˈoʊvər ðə kæt/"},
-  {pv:"show around", meaning:"Mostrar lugar", phonetic:"/ʃoʊ əˈraʊnd/", example:"He showed me around the city.", examplePhon:"/hi ʃoʊd mi əˈraʊnd ðə ˈsɪti/"},
-  {pv:"take out", meaning:"Sacar", phonetic:"/teɪk aʊt/", example:"He took out the trash.", examplePhon:"/hi tʊk aʊt ðə træʃ/"},
-  {pv:"turn over", meaning:"Dar vuelta", phonetic:"/tɜrn ˈoʊvər/", example:"Turn over the page.", examplePhon:"/tɜrn ˈoʊvər ðə peɪdʒ/"},
-  {pv:"watch out", meaning:"Tener cuidado", phonetic:"/wɑʧ aʊt/", example:"Watch out for the wet floor.", examplePhon:"/wɑʧ aʊt fɔr ðə wɛt flɔr/"},
-  {pv:"break out", meaning:"Estallar", phonetic:"/breɪk aʊt/", example:"A fire broke out in the kitchen.", examplePhon:"/ə faɪər broʊk aʊt ɪn ðə ˈkɪʧɪn/"},
-  {pv:"bring out", meaning:"Sacar a la luz", phonetic:"/brɪŋ aʊt/", example:"The teacher brought out the best in the students.", examplePhon:"/ðə ˈtiʧər brɔt aʊt ðə bɛst ɪn ðə ˈstudənts/"},
-  {pv:"carry out", meaning:"Llevar a cabo", phonetic:"/ˈkæri aʊt/", example:"They carried out the experiment.", examplePhon:"/ðeɪ ˈkæri aʊt ði ˌɛkspəˈrɪmənt/"},
-  {pv:"come along", meaning:"Acompañar/Avanzar", phonetic:"/kʌm əˈlɔŋ/", example:"Come along with us.", examplePhon:"/kʌm əˈlɔŋ wɪð ʌs/"},
-  {pv:"cut out", meaning:"Eliminar/Recortar", phonetic:"/kʌt aʊt/", example:"Cut out the unnecessary parts.", examplePhon:"/kʌt aʊt ði ˌʌnˈnɛsəˌsɛri pɑrts/"}, 
-  {pv:"account for", meaning:"Explicar/Justificar", phonetic:"/əˈkaʊnt fɔr/", example:"Can you account for your absence?", examplePhon:"/kæn ju əˈkaʊnt fɔr jʊr ˈæbsəns/"},
-    // --- 33 Difícil ---
-  {pv:"account for", meaning:"Explicar/Justificar", phonetic:"/əˈkaʊnt fɔr/", example:"Can you account for your absence?", examplePhon:"/kæn ju əˈkaʊnt fɔr jʊr ˈæbsəns/"},
-  {pv:"add up", meaning:"Sumar/Tener sentido", phonetic:"/æd ʌp/", example:"His story doesn't add up.", examplePhon:"/hɪz ˈstɔri ˈdəzənt æd ʌp/"},
-  {pv:"back out", meaning:"Echarse atrás", phonetic:"/bæk aʊt/", example:"He backed out of the deal.", examplePhon:"/hi bækɪd aʊt ʌv ðə dil/"},
-  {pv:"bear with", meaning:"Tener paciencia", phonetic:"/bɛr wɪð/", example:"Please bear with me while I explain.", examplePhon:"/pliz bɛr wɪð mi waɪl aɪ ɪkˈspleɪn/"},
-  {pv:"break off", meaning:"Romper relación/Interrumpir", phonetic:"/breɪk ɒf/", example:"They broke off their engagement.", examplePhon:"/ðeɪ broʊk ɒf ðɛr ɪnˈɡeɪdʒmənt/"},
-  {pv:"bring forward", meaning:"Proponer/Adelantar", phonetic:"/brɪŋ ˈfɔrwərd/", example:"The meeting was brought forward to Monday.", examplePhon:"/ðə ˈmitɪŋ wəz brɔt ˈfɔrwərd tu ˈmʌnˌdeɪ/"},
-  {pv:"call in", meaning:"Llamar/Invitar", phonetic:"/kɔl ɪn/", example:"The manager called in the employees.", examplePhon:"/ðə ˈmænɪdʒər kɔld ɪn ði ɛmˈplɔɪiz/"},
-  {pv:"carry over", meaning:"Trasladar/Extender", phonetic:"/ˈkæri ˈoʊvər/", example:"The balance will carry over to next month.", examplePhon:"/ðə ˈbæləns wɪl ˈkæri ˈoʊvər tu nɛkst mʌnθ/"},
-  {pv:"check up on", meaning:"Verificar", phonetic:"/ʧɛk ʌp ɒn/", example:"I need to check up on my patients.", examplePhon:"/aɪ nid tu ʧɛk ʌp ɒn maɪ ˈpeɪʃənts/"},
-  {pv:"come forward", meaning:"Presentarse", phonetic:"/kʌm ˈfɔrwərd/", example:"Witnesses came forward with information.", examplePhon:"/ˈwɪtnəsɪz keɪm ˈfɔrwərd wɪð ˌɪnfərˈmeɪʃən/"},
-  {pv:"cut back", meaning:"Reducir", phonetic:"/kʌt bæk/", example:"They are cutting back on expenses.", examplePhon:"/ðeɪ ɑr ˈkʌtɪŋ bæk ɒn ɪkˈspɛnsɪz/"},
-  {pv:"do without", meaning:"Arreglárselas sin", phonetic:"/du wɪˈðaʊt/", example:"We can do without sugar for a while.", examplePhon:"/wi kæn du wɪˈðaʊt ˈʃʊɡər fɔr ə waɪl/"},
-  {pv:"draw up", meaning:"Redactar", phonetic:"/drɔ ʌp/", example:"They drew up a contract.", examplePhon:"/ðeɪ dru ʌp ə ˈkɑnˌtrækt/"},
-  {pv:"drop by", meaning:"Pasar por", phonetic:"/drɒp baɪ/", example:"I dropped by her office yesterday.", examplePhon:"/aɪ drɒpt baɪ hɜr ˈɒfɪs ˈjɛstərˌdeɪ/"},
-  {pv:"fall behind", meaning:"Quedarse atrás", phonetic:"/fɔl bɪˈhaɪnd/", example:"She fell behind in her studies.", examplePhon:"/ʃi fɛl bɪˈhaɪnd ɪn hɜr ˈstʌdiz/"},
-  {pv:"fill in", meaning:"Rellenar/Informar", phonetic:"/fɪl ɪn/", example:"Please fill in this form.", examplePhon:"/pliz fɪl ɪn ðɪs fɔrm/"},
-  {pv:"get over", meaning:"Superar", phonetic:"/ɡɛt ˈoʊvər/", example:"He got over his fear of heights.", examplePhon:"/hi ɡɑt ˈoʊvər hɪz fɪr ʌv haɪts/"},
-  {pv:"give off", meaning:"Emitir", phonetic:"/ɡɪv ɒf/", example:"The flowers give off a pleasant scent.", examplePhon:"/ðə ˈflaʊərz ɡɪv ɒf ə ˈplɛzənt sɛnt/"},
-  {pv:"go through", meaning:"Atravesar/Examinar", phonetic:"/ɡoʊ θru/", example:"She went through a difficult time.", examplePhon:"/ʃi wɛnt θru ə ˈdɪfəkəlt taɪm/"},
-  {pv:"hold up", meaning:"Retrasar/Sostener", phonetic:"/hoʊld ʌp/", example:"The traffic held us up.", examplePhon:"/ðə ˈtræfɪk hɛld ʌs ʌp/"},
-  {pv:"keep away", meaning:"Mantener alejado", phonetic:"/kip əˈweɪ/", example:"Keep away from dangerous animals.", examplePhon:"/kip əˈweɪ frɒm ˈdeɪndʒərəs ˈænəməlz/"},
-  {pv:"look down on", meaning:"Menospreciar", phonetic:"/lʊk daʊn ɒn/", example:"Don't look down on anyone.", examplePhon:"/doʊnt lʊk daʊn ɒn ˈɛniwʌn/"},
-  {pv:"make up for", meaning:"Compensar", phonetic:"/meɪk ʌp fɔr/", example:"She made up for her mistake.", examplePhon:"/ʃi meɪd ʌp fɔr hɜr mɪsˈteɪk/"},
-  {pv:"mix up", meaning:"Confundir", phonetic:"/mɪks ʌp/", example:"I mixed up the documents.", examplePhon:"/aɪ mɪkst ʌp ðə ˈdɑkjəmənts/"},
-  {pv:"pass out", meaning:"Desmayarse/Distribuir", phonetic:"/pæs aʊt/", example:"He passed out from exhaustion.", examplePhon:"/hi pæst aʊt frɒm ɪɡˈzɔsʧən/"},
-  {pv:"pull out", meaning:"Retirarse", phonetic:"/pʊl aʊt/", example:"The company pulled out of the deal.", examplePhon:"/ðə ˈkʌmpəni pʊld aʊt ʌv ðə dil/"},
-  {pv:"put up with", meaning:"Soportar", phonetic:"/pʊt ʌp wɪð/", example:"I can't put up with this noise.", examplePhon:"/aɪ kænt pʊt ʌp wɪð ðɪs nɔɪz/"},
-  {pv:"run through", meaning:"Revisar/Rapido repaso", phonetic:"/rʌn θru/", example:"Let's run through the main points.", examplePhon:"/lɛts rʌn θru ðə meɪn pɔɪnts/"},
-  {pv:"set out", meaning:"Emprender/Planear", phonetic:"/sɛt aʊt/", example:"They set out on a journey.", examplePhon:"/ðeɪ sɛt aʊt ɒn ə ˈʤɜrni/"},
-  {pv:"stand by", meaning:"Apoyar/Esperar", phonetic:"/stænd baɪ/", example:"I will stand by you no matter what.", examplePhon:"/aɪ wɪl stænd baɪ ju noʊ ˈmætər wʌt/"},
-  {pv:"take in", meaning:"Comprender/Asimilar", phonetic:"/teɪk ɪn/", example:"She took in the beautiful scenery.", examplePhon:"/ʃi tʊk ɪn ðə ˈbjutəfəl ˈsinəri/"},
-  {pv:"turn aside", meaning:"Apartar/Desviar", phonetic:"/tɜrn əˈsaɪd/", example:"He turned aside from the path.", examplePhon:"/hi tɜrnd əˈsaɪd frɒm ðə pæθ/"},
-  {pv:"watch over", meaning:"Vigilar/Cuidar", phonetic:"/wɑʧ ˈoʊvər/", example:"The nurse watches over the patients.", examplePhon:"/ðə nɜrs ˈwɑʧəz ˈoʊvər ðə ˈpeɪʃənts/"},
-  {pv:"work up", meaning:"Desarrollar/Enfurecer", phonetic:"/wɜrk ʌp/", example:"He worked up an appetite.", examplePhon:"/hi wɜrkt ʌp æn ˈæpəˌtaɪt/"},
-  {pv:"zero in on", meaning:"Concentrarse en", phonetic:"/ˈzɪroʊ ɪn ɒn/", example:"We need to zero in on the main issue.", examplePhon:"/wi nid tu ˈzɪroʊ ɪn ɒn ðə meɪn ˈɪʃu/"}, 
-];
+    // --- Hablar ---
+    function speak(text){
+      if(!('speechSynthesis' in window)){ alert('Tu navegador no soporta voz'); return; }
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang='en-US';
+      utter.voice = englishVoiceFemale;
+      utter.rate = 1;
+      speechSynthesis.cancel();
+      speechSynthesis.speak(utter);
+    }
 
-// --- Cargar voces ---
-function loadVoices(){
-  const voices = speechSynthesis.getVoices();
-  englishVoiceFemale = voices.find(v=>v.lang==='en-US' && v.name.toLowerCase().includes('female')) || voices[0];
-  englishVoiceMale = voices.find(v=>v.lang==='en-US' && v.name.toLowerCase().includes('male'));
-}
-speechSynthesis.onvoiceschanged = loadVoices;
-window.onload = () => {
-  loadVoices();
-  renderPhrasalVerbs();
-};
+    // --- Render phrasal verbs ---
+    function renderPhrasalVerbs(){
+      const container = document.getElementById('phrasalVerbsContainer');
+      container.innerHTML = '';
+      phrasalVerbsData.forEach(item => {
+        const div = document.createElement('div'); div.className = 'phrasal-item';
 
-// --- Cambiar voz ---
-function toggleVoice(){
-  useMale = !useMale;
-  document.getElementById('voiceName').textContent = useMale ? 'Masculina' : 'Femenina (default)';
-}
+        const header = document.createElement('div'); header.className = 'phrasal-header';
+        header.innerHTML = `<b>${item.pv}</b> <span>(${item.meaning})</span>`;
+        div.appendChild(header);
 
-// --- Hablar ---
-function speak(text){
-  if(!('speechSynthesis' in window)){ alert('Tu navegador no soporta voz'); return;}
-  const utter = new SpeechSynthesisUtterance(text);
-  utter.lang='en-US';
-  if(useMale && englishVoiceMale) utter.voice = englishVoiceMale;
-  else utter.voice = englishVoiceFemale;
-  utter.rate = 1;
-  speechSynthesis.cancel();
-  speechSynthesis.speak(utter);
-}
+        const phon = document.createElement('div'); phon.className = 'phrasal-phonetic'; phon.textContent = `Phonetic: ${item.phonetic}`;
+        div.appendChild(phon);
 
-// --- Render phrasal verbs ---
-function renderPhrasalVerbs(){
-  const container = document.getElementById('phrasalVerbsContainer');
-  container.innerHTML='';
-  phrasalVerbsData.forEach(item=>{
-    const div = document.createElement('div'); div.className='phrasal-item';
-    const header = document.createElement('div'); header.className='phrasal-header';
-    header.innerHTML=`<b>${item.pv}</b> <span>(${item.meaning})</span>`;
-    div.appendChild(header);
-    const phon = document.createElement('div'); phon.className='phrasal-phonetic'; phon.textContent=`Phonetic: ${item.phonetic}`;
-    div.appendChild(phon);
-    const buttons = document.createElement('div'); buttons.className='phrasal-buttons';
-    const btnPV = document.createElement('button'); btnPV.textContent='Listen PV'; btnPV.onclick=()=>speak(item.pv);
-    const btnEx = document.createElement('button'); btnEx.textContent='Listen Example'; btnEx.onclick=()=>speak(item.example);
-    const exPhon = document.createElement('div'); exPhon.className='phrasal-phonetic'; exPhon.textContent=`Example: ${item.example} | Phonetic: ${item.examplePhon}`;
-    buttons.appendChild(btnPV); buttons.appendChild(btnEx); div.appendChild(buttons); div.appendChild(exPhon);
-    container.appendChild(div);
-  });
-}
-</script>
+        const example = document.createElement('div'); example.textContent = `Example: ${item.example} (${item.examplePhon})`;
+        div.appendChild(example);
+
+        const buttons = document.createElement('div'); buttons.className = 'phrasal-buttons';
+        const btnPv = document.createElement('button'); btnPv.textContent = '🔊 PV'; btnPv.onclick = () => speak(item.pv);
+        const btnExample = document.createElement('button'); btnExample.textContent = '🔊 Example'; btnExample.onclick = () => speak(item.example);
+        buttons.appendChild(btnPv); buttons.appendChild(btnExample);
+
+        div.appendChild(buttons);
+        container.appendChild(div);
+      });
+    }
+  </script>
 </body>
 </html>
