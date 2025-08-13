@@ -23,6 +23,7 @@ input[type=text] { width: 100%; padding: 6px; margin-top: 5px; font-size: 16px; 
   <p id="listenSentence"></p>
   <button onclick="speakCurrent(1)">Listen Normal</button>
   <button onclick="speakCurrent(0.6)">Listen Lento</button>
+  <button onclick="nextListen()">Saltar palabra</button>
   <input type="text" id="listenInput" placeholder="Escribe el phrasal verb aquí..." oninput="checkListenInput()">
   <div id="listenOutput"></div>
 </div>
@@ -31,116 +32,177 @@ input[type=text] { width: 100%; padding: 6px; margin-top: 5px; font-size: 16px; 
   <h3>Completa la oración (phrasal verb oculto)</h3>
   <p id="fillSentence"></p>
   <button onclick="revealPV()">Revelar Phrasal Verb</button>
+  <button onclick="nextFill()">Saltar palabra</button>
   <input type="text" id="fillInput" placeholder="Escribe el phrasal verb aquí..." oninput="checkFillInput()">
   <div id="fillOutput"></div>
 </div>
 
 <script>
+// --- LISTA COMPLETA DE 99 PHRASAL VERBS ---
 const phrasalVerbs = {
-  "Básico":[
-    {"pv":"get up","example":"I get up early every day."},
-    {"pv":"put on","example":"She put on her jacket before leaving."},
-    {"pv":"take off","example":"The plane takes off at 9 PM."},
-    {"pv":"turn on","example":"Please turn on the lights."},
-    {"pv":"turn off","example":"Turn off the TV when you finish."},
-    {"pv":"look for","example":"I'm looking for my keys."},
-    {"pv":"give up","example":"Don't give up on your dreams."},
-    {"pv":"bring up","example":"She brought up an interesting topic."},
-    {"pv":"call off","example":"They called off the meeting."},
-    {"pv":"come back","example":"He will come back tomorrow."},
-    {"pv":"look after","example":"She looks after her younger brother."},
-    {"pv":"make up","example":"They made up after the argument."},
-    {"pv":"run out","example":"We ran out of milk."},
-    {"pv":"set up","example":"He set up a new company."},
-    {"pv":"pick up","example":"I will pick you up at the airport."},
-    {"pv":"break down","example":"The car broke down on the highway."},
-    {"pv":"put off","example":"They put off the meeting until next week."},
-    {"pv":"check out","example":"Check out this new restaurant."},
-    {"pv":"go on","example":"Please go on with your story."},
-    {"pv":"fill out","example":"Please fill out this form."},
-    {"pv":"give in","example":"She finally gave in to their demands."},
-    {"pv":"hold on","example":"Hold on a minute, I'll be right back."},
-    {"pv":"look up","example":"I need to look up that word in the dictionary."},
-    {"pv":"run into","example":"I ran into an old friend yesterday."},
-    {"pv":"take over","example":"The company was taken over by a larger firm."},
-    {"pv":"turn up","example":"He turned up late to the party."},
-    {"pv":"turn down","example":"She turned down the job offer."},
-    {"pv":"work out","example":"Everything worked out well in the end."},
-    {"pv":"bring back","example":"That song brings back memories."},
-    {"pv":"come across","example":"I came across an interesting article today."},
-    {"pv":"cut down","example":"He cut down on sugar to lose weight."},
-    {"pv":"get along","example":"They get along very well."}
-  ],
-  "Intermedio": [
-    // 33 phrasal verbs intermedios aquí
-  ],
-  "Difícil": [
-    // 33 phrasal verbs difíciles aquí
-  ]
+"Básico":[
+{"pv":"get up","example":"I get up early every day."},
+{"pv":"put on","example":"She put on her jacket before leaving."},
+{"pv":"take off","example":"The plane takes off at 9 PM."},
+{"pv":"turn on","example":"Please turn on the lights."},
+{"pv":"turn off","example":"Turn off the TV when you finish."},
+{"pv":"look for","example":"I'm looking for my keys."},
+{"pv":"give up","example":"Don't give up on your dreams."},
+{"pv":"bring up","example":"She brought up an interesting topic."},
+{"pv":"call off","example":"They called off the meeting."},
+{"pv":"come back","example":"He will come back tomorrow."},
+{"pv":"look after","example":"She looks after her younger brother."},
+{"pv":"make up","example":"They made up after the argument."},
+{"pv":"run out","example":"We ran out of milk."},
+{"pv":"set up","example":"He set up a new company."},
+{"pv":"pick up","example":"I will pick you up at the airport."},
+{"pv":"break down","example":"The car broke down on the highway."},
+{"pv":"put off","example":"They put off the meeting until next week."},
+{"pv":"check out","example":"Check out this new restaurant."},
+{"pv":"go on","example":"Please go on with your story."},
+{"pv":"fill out","example":"Please fill out this form."},
+{"pv":"give in","example":"She finally gave in to their demands."},
+{"pv":"hold on","example":"Hold on a minute, I'll be right back."},
+{"pv":"look up","example":"I need to look up that word in the dictionary."},
+{"pv":"run into","example":"I ran into an old friend yesterday."},
+{"pv":"take over","example":"The company was taken over by a larger firm."},
+{"pv":"turn up","example":"He turned up late to the party."},
+{"pv":"turn down","example":"She turned down the job offer."},
+{"pv":"work out","example":"Everything worked out well in the end."},
+{"pv":"bring back","example":"That song brings back memories."},
+{"pv":"come across","example":"I came across an interesting article today."},
+{"pv":"cut down","example":"He cut down on sugar to lose weight."},
+{"pv":"get along","example":"They get along very well."}
+],
+"Intermedio":[
+{"pv":"look forward to","example":"I look forward to meeting you."},
+{"pv":"run away","example":"The dog ran away from home."},
+{"pv":"get over","example":"She got over her fear of flying."},
+{"pv":"put up with","example":"I can't put up with this noise anymore."},
+{"pv":"take after","example":"She takes after her mother."},
+{"pv":"break up","example":"They broke up last month."},
+{"pv":"bring out","example":"This new model brings out better performance."},
+{"pv":"come up with","example":"He came up with a brilliant idea."},
+{"pv":"cut out","example":"You should cut out junk food."},
+{"pv":"fill in","example":"Please fill in the blanks."},
+{"pv":"get back","example":"I got back home late."},
+{"pv":"give away","example":"She gave away all her old clothes."},
+{"pv":"go back","example":"We went back to our hotel."},
+{"pv":"look into","example":"They are looking into the problem."},
+{"pv":"make out","example":"I can't make out what he is saying."},
+{"pv":"pick out","example":"She picked out a nice dress."},
+{"pv":"put down","example":"He put down his pen."},
+{"pv":"run over","example":"The car ran over a cat."},
+{"pv":"set off","example":"We set off early in the morning."},
+{"pv":"take up","example":"I took up swimming last year."},
+{"pv":"turn around","example":"He turned the company around successfully."},
+{"pv":"watch out","example":"Watch out for the car!"},
+{"pv":"call back","example":"She called back an hour later."},
+{"pv":"come in","example":"Please come in."},
+{"pv":"drop off","example":"I will drop you off at school."},
+{"pv":"get in","example":"He got in the car quickly."},
+{"pv":"go off","example":"The alarm went off at 7 AM."},
+{"pv":"look out","example":"Look out! There’s a bike coming."},
+{"pv":"make up for","example":"He tried to make up for being late."},
+{"pv":"run back","example":"I ran back to catch my wallet."},
+{"pv":"show up","example":"She showed up late."}
+],
+"Difícil":[
+{"pv":"back out","example":"He backed out of the deal."},
+{"pv":"bring about","example":"The new law brought about changes."},
+{"pv":"call on","example":"The teacher called on the student."},
+{"pv":"come down with","example":"He came down with the flu."},
+{"pv":"cut back","example":"They cut back on expenses."},
+{"pv":"drop by","example":"I dropped by her house."},
+{"pv":"fall behind","example":"He fell behind in his studies."},
+{"pv":"get through","example":"She got through the exam successfully."},
+{"pv":"give off","example":"The flowers give off a nice smell."},
+{"pv":"go through","example":"He went through a difficult time."},
+{"pv":"hold back","example":"He held back his anger."},
+{"pv":"keep up","example":"Keep up the good work!"},
+{"pv":"let down","example":"Don't let me down."},
+{"pv":"look back","example":"He looked back at his childhood."},
+{"pv":"make off with","example":"The thief made off with the jewels."},
+{"pv":"pass out","example":"He passed out from exhaustion."},
+{"pv":"put aside","example":"She put aside some money."},
+{"pv":"set aside","example":"They set aside time for practice."},
+{"pv":"show off","example":"He likes to show off his skills."},
+{"pv":"stand by","example":"I will stand by you."},
+{"pv":"take in","example":"She took in the stray cat."},
+{"pv":"talk over","example":"Let's talk over the proposal."},
+{"pv":"think over","example":"I need to think over your suggestion."},
+{"pv":"turn in","example":"He turned in his assignment."},
+{"pv":"wait on","example":"He waited on the customers."},
+{"pv":"wind up","example":"They wound up the meeting early."},
+{"pv":"write down","example":"Write down your notes."},
+{"pv":"come up","example":"Something important came up."},
+{"pv":"run off","example":"He ran off without paying."},
+{"pv":"bring in","example":"The campaign brought in many donations."}
+]
 };
 
-let practiceList = [...phrasalVerbs["Básico"]]; // reemplaza con los 99 para completo
+let practiceList = [...phrasalVerbs["Básico"], ...phrasalVerbs["Intermedio"], ...phrasalVerbs["Difícil"]];
 let currentIndexListen = 0;
 let currentIndexFill = 0;
 
 // --- VOZ ---
 function speak(text, rate=1){
-  if(!('speechSynthesis' in window)){ alert('Tu navegador no soporta voz'); return;}
-  const utter = new SpeechSynthesisUtterance(text);
-  utter.lang='en-US';
-  const voices = window.speechSynthesis.getVoices();
-  utter.voice = voices.find(v=>v.lang==='en-US' && v.name.toLowerCase().includes('female')) || voices[0];
-  utter.rate = rate;
-  window.speechSynthesis.cancel();
-  window.speechSynthesis.speak(utter);
+if(!('speechSynthesis' in window)){ alert('Tu navegador no soporta voz'); return;}
+const utter = new SpeechSynthesisUtterance(text);
+utter.lang='en-US';
+const voices = window.speechSynthesis.getVoices();
+utter.voice = voices.find(v=>v.lang==='en-US' && v.name.toLowerCase().includes('female')) || voices[0];
+utter.rate = rate;
+window.speechSynthesis.cancel();
+window.speechSynthesis.speak(utter);
 }
 
 // --- MODO ESCUCHA ---
 function showListenSentence(){
-  document.getElementById('listenSentence').textContent = practiceList[currentIndexListen].example;
-  document.getElementById('listenInput').value='';
-  document.getElementById('listenOutput').textContent='';
+document.getElementById('listenSentence').textContent = practiceList[currentIndexListen].example;
+document.getElementById('listenInput').value='';
+document.getElementById('listenOutput').textContent='';
 }
 function speakCurrent(rate){ speak(practiceList[currentIndexListen].example, rate); }
 function checkListenInput(){
-  const val = document.getElementById('listenInput').value.trim().toLowerCase();
-  if(val === practiceList[currentIndexListen].pv.toLowerCase()){
-    document.getElementById('listenOutput').textContent='✅ Correcto!';
-    nextListen();
-  } else {
-    document.getElementById('listenOutput').textContent='';
-  }
+const val = document.getElementById('listenInput').value.trim().toLowerCase();
+if(val === practiceList[currentIndexListen].pv.toLowerCase()){
+document.getElementById('listenOutput').textContent='✅ Correcto!';
+setTimeout(nextListen, 500);
+} else {
+document.getElementById('listenOutput').textContent='';
+}
 }
 function nextListen(){
-  currentIndexListen++;
-  if(currentIndexListen >= practiceList.length) currentIndexListen=0;
-  showListenSentence();
+currentIndexListen++;
+if(currentIndexListen >= practiceList.length) currentIndexListen=0;
+showListenSentence();
 }
 showListenSentence();
 
 // --- MODO COMPLETA ORACION ---
 function showFillSentence(){
-  const sentence = practiceList[currentIndexFill].example.replace(practiceList[currentIndexFill].pv, '_____');
-  document.getElementById('fillSentence').textContent = sentence;
-  document.getElementById('fillInput').value='';
-  document.getElementById('fillOutput').textContent='';
+const sentence = practiceList[currentIndexFill].example.replace(practiceList[currentIndexFill].pv, '_____');
+document.getElementById('fillSentence').textContent = sentence;
+document.getElementById('fillInput').value='';
+document.getElementById('fillOutput').textContent='';
 }
 function checkFillInput(){
-  const val = document.getElementById('fillInput').value.trim().toLowerCase();
-  if(val === practiceList[currentIndexFill].pv.toLowerCase()){
-    document.getElementById('fillOutput').textContent='✅ Correcto!';
-    nextFill();
-  } else {
-    document.getElementById('fillOutput').textContent='';
-  }
+const val = document.getElementById('fillInput').value.trim().toLowerCase();
+if(val === practiceList[currentIndexFill].pv.toLowerCase()){
+document.getElementById('fillOutput').textContent='✅ Correcto!';
+setTimeout(nextFill, 500);
+} else {
+document.getElementById('fillOutput').textContent='';
+}
 }
 function nextFill(){
-  currentIndexFill++;
-  if(currentIndexFill >= practiceList.length) currentIndexFill=0;
-  showFillSentence();
+currentIndexFill++;
+if(currentIndexFill >= practiceList.length) currentIndexFill=0;
+showFillSentence();
 }
 function revealPV(){
-  document.getElementById('fillOutput').textContent = `💡 Phrasal Verb: ${practiceList[currentIndexFill].pv}`;
+document.getElementById('fillOutput').textContent = `💡 Phrasal Verb: ${practiceList[currentIndexFill].pv}`;
 }
 showFillSentence();
 </script>
