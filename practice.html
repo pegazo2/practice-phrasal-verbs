@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Practice Phrasal Verbs</title>
+<style>
+body { font-family: Arial, sans-serif; margin: 20px; background: #f7f9fc; }
+h2 { color: #2a3eb1; }
+.mode-section { margin-top: 20px; padding: 15px; background: #fff; border-radius: 8px; border: 1px solid #ccc; }
+button { margin: 5px; padding: 5px 10px; cursor: pointer; border-radius: 4px; border: 1px solid #999; background: #e0e0e0; }
+button:hover { background: #d0d0ff; }
+#output { margin-top: 10px; font-weight: bold; }
+input[type=text] { width: 100%; padding: 6px; margin-top: 5px; font-size: 16px; }
+</style>
+</head>
+<body>
+<h2>Modo Práctica: Phrasal Verbs</h2>
+<button onclick="window.location.href='index.html'">Volver a la Lista</button>
+
+<div class="mode-section">
+  <h3>Escucha y escribe el Phrasal Verb</h3>
+  <p id="listenSentence"></p>
+  <button onclick="speakCurrent(1)">Listen Normal</button>
+  <button onclick="speakCurrent(0.6)">Listen Lento</button>
+  <input type="text" id="listenInput" placeholder="Escribe el phrasal verb aquí..." oninput="checkListenInput()">
+  <div id="listenOutput"></div>
+</div>
+
+<div class="mode-section">
+  <h3>Completa la oración (phrasal verb oculto)</h3>
+  <p id="fillSentence"></p>
+  <button onclick="revealPV()">Revelar Phrasal Verb</button>
+  <input type="text" id="fillInput" placeholder="Escribe el phrasal verb aquí..." oninput="checkFillInput()">
+  <div id="fillOutput"></div>
+</div>
+
+<script>
+const phrasalVerbs = {
+  "Básico":[
+    {"pv":"get up","example":"I get up early every day."},
+    {"pv":"put on","example":"She put on her jacket before leaving."},
+    {"pv":"take off","example":"The plane takes off at 9 PM."},
+    {"pv":"turn on","example":"Please turn on the lights."},
+    {"pv":"turn off","example":"Turn off the TV when you finish."},
+    {"pv":"look for","example":"I'm looking for my keys."},
+    {"pv":"give up","example":"Don't give up on your dreams."},
+    {"pv":"bring up","example":"She brought up an interesting topic."},
+    {"pv":"call off","example":"They called off the meeting."},
+    {"pv":"come back","example":"He will come back tomorrow."},
+    {"pv":"look after","example":"She looks after her younger brother."},
+    {"pv":"make up","example":"They made up after the argument."},
+    {"pv":"run out","example":"We ran out of milk."},
+    {"pv":"set up","example":"He set up a new company."},
+    {"pv":"pick up","example":"I will pick you up at the airport."},
+    {"pv":"break down","example":"The car broke down on the highway."},
+    {"pv":"put off","example":"They put off the meeting until next week."},
+    {"pv":"check out","example":"Check out this new restaurant."},
+    {"pv":"go on","example":"Please go on with your story."},
+    {"pv":"fill out","example":"Please fill out this form."},
+    {"pv":"give in","example":"She finally gave in to their demands."},
+    {"pv":"hold on","example":"Hold on a minute, I'll be right back."},
+    {"pv":"look up","example":"I need to look up that word in the dictionary."},
+    {"pv":"run into","example":"I ran into an old friend yesterday."},
+    {"pv":"take over","example":"The company was taken over by a larger firm."},
+    {"pv":"turn up","example":"He turned up late to the party."},
+    {"pv":"turn down","example":"She turned down the job offer."},
+    {"pv":"work out","example":"Everything worked out well in the end."},
+    {"pv":"bring back","example":"That song brings back memories."},
+    {"pv":"come across","example":"I came across an interesting article today."},
+    {"pv":"cut down","example":"He cut down on sugar to lose weight."},
+    {"pv":"get along","example":"They get along very well."}
+  ],
+  "Intermedio": [
+    // 33 phrasal verbs intermedios aquí
+  ],
+  "Difícil": [
+    // 33 phrasal verbs difíciles aquí
+  ]
+};
+
+let practiceList = [...phrasalVerbs["Básico"]]; // reemplaza con los 99 para completo
+let currentIndexListen = 0;
+let currentIndexFill = 0;
+
+// --- VOZ ---
+function speak(text, rate=1){
+  if(!('speechSynthesis' in window)){ alert('Tu navegador no soporta voz'); return;}
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang='en-US';
+  const voices = window.speechSynthesis.getVoices();
+  utter.voice = voices.find(v=>v.lang==='en-US' && v.name.toLowerCase().includes('female')) || voices[0];
+  utter.rate = rate;
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(utter);
+}
+
+// --- MODO ESCUCHA ---
+function showListenSentence(){
+  document.getElementById('listenSentence').textContent = practiceList[currentIndexListen].example;
+  document.getElementById('listenInput').value='';
+  document.getElementById('listenOutput').textContent='';
+}
+function speakCurrent(rate){ speak(practiceList[currentIndexListen].example, rate); }
+function checkListenInput(){
+  const val = document.getElementById('listenInput').value.trim().toLowerCase();
+  if(val === practiceList[currentIndexListen].pv.toLowerCase()){
+    document.getElementById('listenOutput').textContent='✅ Correcto!';
+    nextListen();
+  } else {
+    document.getElementById('listenOutput').textContent='';
+  }
+}
+function nextListen(){
+  currentIndexListen++;
+  if(currentIndexListen >= practiceList.length) currentIndexListen=0;
+  showListenSentence();
+}
+showListenSentence();
+
+// --- MODO COMPLETA ORACION ---
+function showFillSentence(){
+  const sentence = practiceList[currentIndexFill].example.replace(practiceList[currentIndexFill].pv, '_____');
+  document.getElementById('fillSentence').textContent = sentence;
+  document.getElementById('fillInput').value='';
+  document.getElementById('fillOutput').textContent='';
+}
+function checkFillInput(){
+  const val = document.getElementById('fillInput').value.trim().toLowerCase();
+  if(val === practiceList[currentIndexFill].pv.toLowerCase()){
+    document.getElementById('fillOutput').textContent='✅ Correcto!';
+    nextFill();
+  } else {
+    document.getElementById('fillOutput').textContent='';
+  }
+}
+function nextFill(){
+  currentIndexFill++;
+  if(currentIndexFill >= practiceList.length) currentIndexFill=0;
+  showFillSentence();
+}
+function revealPV(){
+  document.getElementById('fillOutput').textContent = `💡 Phrasal Verb: ${practiceList[currentIndexFill].pv}`;
+}
+showFillSentence();
+</script>
+</body>
+</html>
