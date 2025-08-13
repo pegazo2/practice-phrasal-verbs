@@ -145,16 +145,30 @@
     ];
 
     // --- Cargar voces ---
-    let englishVoiceFemale;
-    function loadVoices(){
-      const voices = speechSynthesis.getVoices();
-      englishVoiceFemale = voices.find(v => v.lang === 'en-US' && v.name.toLowerCase().includes('female')) || voices[0];
-    }
-    speechSynthesis.onvoiceschanged = loadVoices;
-    window.onload = () => {
-      loadVoices();
-      renderPhrasalVerbs();
-    };
+    // --- Cargar voces ---
+let englishVoiceFemale;
+function loadVoices(){
+  const voices = speechSynthesis.getVoices();
+  
+  // Primero buscar voz femenina en en-US
+  englishVoiceFemale = voices.find(v => v.lang === 'en-US' && /female/i.test(v.name));
+
+  // Si no hay, tomar cualquier voz en-US
+  if(!englishVoiceFemale){
+    englishVoiceFemale = voices.find(v => v.lang === 'en-US');
+  }
+
+  // Si aún no hay, tomar la primera disponible
+  if(!englishVoiceFemale){
+    englishVoiceFemale = voices[0];
+  }
+}
+
+speechSynthesis.onvoiceschanged = loadVoices;
+window.onload = () => {
+  loadVoices();
+  renderPhrasalVerbs();
+};
 
     // --- Hablar ---
     function speak(text){
