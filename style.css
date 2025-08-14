@@ -1,93 +1,102 @@
-/* --- Reset básico --- */
+/* --- RESET BÁSICO --- */
 * {
-  box-sizing: border-box;
   margin: 0;
   padding: 0;
-}
-
-/* --- Body --- */
-body {
+  box-sizing: border-box;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(to right, #e0f7fa, #f1f8e9);
+}
+
+/* --- FONDO Y CENTRADO --- */
+body {
+  background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+/* --- ENCABEZADOS --- */
+h1, h2, h3 {
   color: #333;
-  padding: 20px;
-}
-
-/* --- Título --- */
-h2 {
+  margin-bottom: 20px;
   text-align: center;
-  margin-bottom: 30px;
-  color: #00796b;
-  font-size: 2em;
-  text-shadow: 1px 1px 2px #ccc;
 }
 
-/* --- Contenedor de tarjetas --- */
-#phrasalVerbsContainer {
+/* --- CONTENEDOR DE TARJETAS --- */
+.cards-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 20px;
+  width: 100%;
+  max-width: 1200px;
 }
 
-/* --- Tarjeta individual --- */
-.phrasal-item {
-  background: #ffffff;
+/* --- TARJETAS DE PHRASAL VERBS --- */
+.card {
+  background: #fff;
   border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
   padding: 20px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
   transition: transform 0.3s, box-shadow 0.3s;
+  cursor: pointer;
 }
 
-.phrasal-item:hover {
+.card:hover {
   transform: translateY(-5px);
   box-shadow: 0 10px 20px rgba(0,0,0,0.2);
 }
 
-/* --- Encabezado de phrasal verb --- */
-.phrasal-header b {
-  font-size: 1.2em;
-  color: #004d40;
-}
-
-.phrasal-header span {
-  font-style: italic;
-  color: #00796b;
-  margin-left: 5px;
-}
-
-/* --- Fonética --- */
-.phrasal-phonetic {
-  font-style: italic;
-  margin: 10px 0;
-  color: #00695c;
-}
-
-/* --- Ejemplo --- */
-.phrasal-item div:nth-child(3) {
+.card h3 {
+  color: #4a90e2;
   margin-bottom: 10px;
-  color: #424242;
 }
 
-/* --- Botones --- */
-.phrasal-buttons button {
-  padding: 8px 15px;
-  margin-right: 10px;
-  margin-top: 5px;
-  border: none;
-  border-radius: 8px;
-  background: linear-gradient(to right, #26a69a, #00796b);
+.card p {
+  color: #555;
+}
+
+/* --- BOTONES --- */
+button {
+  background: #4a90e2;
   color: #fff;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 10px;
+  font-size: 16px;
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: background 0.3s, transform 0.2s;
+  margin-top: 10px;
 }
 
-.phrasal-buttons button:hover {
+button:hover {
+  background: #357ABD;
   transform: scale(1.05);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
-.phrasal-buttons button:active {
-  transform: scale(0.95);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+/* --- INPUTS --- */
+input[type="text"] {
+  padding: 10px 15px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  margin-right: 10px;
+  font-size: 16px;
+  width: 250px;
 }
 
+input[type="text"]:focus {
+  outline: none;
+  border-color: #4a90e2;
+  box-shadow: 0 0 5px rgba(74, 144, 226, 0.5);
+}
+
+/* --- SECCIÓN DE VERIFICACIÓN --- */
+.verification {
+  margin-top: 20px;
+  text-align: center;
+}
+
+/* --- EFECTO SUAVE EN TODA LA PÁGINA --- */
+* {
+  transition: all 0.3s ease;
+}
