@@ -219,8 +219,11 @@ document.getElementById('checkAnswerBtn').onclick = function(){
 
   if(answerInput.value.trim().toLowerCase() === item.meaning.toLowerCase()){
     feedbackDiv.textContent = '✅ Correcto!';
+    feedbackDiv.style.color = 'green';
+    speak(item.pv); // 🔊 Pronuncia el phrasal verb cuando es correcto
   } else {
     feedbackDiv.textContent = `❌ Incorrecto. La respuesta correcta es: ${item.meaning}`;
+    feedbackDiv.style.color = 'red';
   }
 }
 
