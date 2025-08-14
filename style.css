@@ -1,1 +1,93 @@
+/* --- Reset básico --- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* --- Body --- */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(to right, #e0f7fa, #f1f8e9);
+  color: #333;
+  padding: 20px;
+}
+
+/* --- Título --- */
+h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #00796b;
+  font-size: 2em;
+  text-shadow: 1px 1px 2px #ccc;
+}
+
+/* --- Contenedor de tarjetas --- */
+#phrasalVerbsContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+/* --- Tarjeta individual --- */
+.phrasal-item {
+  background: #ffffff;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.phrasal-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+/* --- Encabezado de phrasal verb --- */
+.phrasal-header b {
+  font-size: 1.2em;
+  color: #004d40;
+}
+
+.phrasal-header span {
+  font-style: italic;
+  color: #00796b;
+  margin-left: 5px;
+}
+
+/* --- Fonética --- */
+.phrasal-phonetic {
+  font-style: italic;
+  margin: 10px 0;
+  color: #00695c;
+}
+
+/* --- Ejemplo --- */
+.phrasal-item div:nth-child(3) {
+  margin-bottom: 10px;
+  color: #424242;
+}
+
+/* --- Botones --- */
+.phrasal-buttons button {
+  padding: 8px 15px;
+  margin-right: 10px;
+  margin-top: 5px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(to right, #26a69a, #00796b);
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.phrasal-buttons button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.phrasal-buttons button:active {
+  transform: scale(0.95);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
 
