@@ -9,6 +9,15 @@
 <body>
   <h2>Phrasal Verbs Trainer - 99 PV</h2>
   <div id="phrasalVerbsContainer"></div>
+  <hr>
+<h3>Modo Práctica</h3>
+<div id="practiceMode">
+  <div id="practiceQuestion"></div>
+  <input type="text" id="practiceAnswer" placeholder="Escribe la traducción en español">
+  <button id="checkAnswerBtn">Verificar</button>
+  <button id="nextQuestionBtn">Siguiente</button>
+  <div id="feedback"></div>
+</div>
 
   <script>
     // --- 99 Phrasal verbs ---
@@ -160,31 +169,71 @@ window.onload = () => {
     }
 
     // --- Render phrasal verbs ---
-    function renderPhrasalVerbs(){
-      const container = document.getElementById('phrasalVerbsContainer');
-      container.innerHTML = '';
-      phrasalVerbsData.forEach(item => {
-        const div = document.createElement('div'); div.className = 'phrasal-item';
+function renderPhrasalVerbs(){
+  const container = document.getElementById('phrasalVerbsContainer');
+  container.innerHTML = '';
+  phrasalVerbsData.forEach(item => {
+    const div = document.createElement('div'); div.className = 'phrasal-item';
 
-        const header = document.createElement('div'); header.className = 'phrasal-header';
-        header.innerHTML = `<b>${item.pv}</b> <span>(${item.meaning})</span>`;
-        div.appendChild(header);
+    const header = document.createElement('div'); header.className = 'phrasal-header';
+    header.innerHTML = `<b>${item.pv}</b> <span>(${item.meaning})</span>`;
+    div.appendChild(header);
 
-        const phon = document.createElement('div'); phon.className = 'phrasal-phonetic'; phon.textContent = `Phonetic: ${item.phonetic}`;
-        div.appendChild(phon);
+    const phon = document.createElement('div'); phon.className = 'phrasal-phonetic'; phon.textContent = `Phonetic: ${item.phonetic}`;
+    div.appendChild(phon);
 
-        const example = document.createElement('div'); example.textContent = `Example: ${item.example} (${item.examplePhon})`;
-        div.appendChild(example);
+    const example = document.createElement('div'); example.textContent = `Example: ${item.example} (${item.examplePhon})`;
+    div.appendChild(example);
 
-        const buttons = document.createElement('div'); buttons.className = 'phrasal-buttons';
-        const btnPv = document.createElement('button'); btnPv.textContent = '🔊 PV'; btnPv.onclick = () => speak(item.pv);
-        const btnExample = document.createElement('button'); btnExample.textContent = '🔊 Example'; btnExample.onclick = () => speak(item.example);
-        buttons.appendChild(btnPv); buttons.appendChild(btnExample);
+    const buttons = document.createElement('div'); buttons.className = 'phrasal-buttons';
+    const btnPv = document.createElement('button'); btnPv.textContent = '🔊 PV'; btnPv.onclick = () => speak(item.pv);
+    const btnExample = document.createElement('button'); btnExample.textContent = '🔊 Example'; btnExample.onclick = () => speak(item.example);
+    buttons.appendChild(btnPv); buttons.appendChild(btnExample);
 
-        div.appendChild(buttons);
-        container.appendChild(div);
-      });
-    }
-  </script>
+    div.appendChild(buttons);
+    container.appendChild(div);
+  });
+}
+
+// --- Modo práctica ---
+let currentPracticeIndex = 0;
+
+function loadPracticeQuestion(){
+  const questionDiv = document.getElementById('practiceQuestion');
+  const answerInput = document.getElementById('practiceAnswer');
+  const feedbackDiv = document.getElementById('feedback');
+
+  // Elegir un phrasal verb aleatorio
+  currentPracticeIndex = Math.floor(Math.random() * phrasalVerbsData.length);
+  const item = phrasalVerbsData[currentPracticeIndex];
+
+  questionDiv.textContent = `Traduce al español: ${item.pv}`;
+  answerInput.value = '';
+  feedbackDiv.textContent = '';
+}
+
+document.getElementById('checkAnswerBtn').onclick = function(){
+  const answerInput = document.getElementById('practiceAnswer');
+  const feedbackDiv = document.getElementById('feedback');
+  const item = phrasalVerbsData[currentPracticeIndex];
+
+  if(answerInput.value.trim().toLowerCase() === item.meaning.toLowerCase()){
+    feedbackDiv.textContent = '✅ Correcto!';
+  } else {
+    feedbackDiv.textContent = `❌ Incorrecto. La respuesta correcta es: ${item.meaning}`;
+  }
+}
+
+document.getElementById('nextQuestionBtn').onclick = function(){
+  loadPracticeQuestion();
+}
+
+// Cargar primera pregunta al inicio
+window.onload = () => {
+  loadVoices();
+  renderPhrasalVerbs();
+  loadPracticeQuestion();
+};
+</script>
 </body>
 </html>
