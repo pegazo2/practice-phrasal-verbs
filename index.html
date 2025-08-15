@@ -220,7 +220,10 @@ document.getElementById('checkAnswerBtn').onclick = function(){
   if(answerInput.value.trim().toLowerCase() === item.meaning.toLowerCase()){
     feedbackDiv.textContent = '✅ Correcto!';
     feedbackDiv.style.color = 'green';
-    speak(item.pv); // 🔊 Pronuncia el phrasal verb cuando es correcto
+    speak(item.pv); // 🔊 Pronuncia el phrasal verb
+
+    // Espera 1.2 segundos antes de cargar la siguiente pregunta
+    setTimeout(loadPracticeQuestion, 1200);
   } else {
     feedbackDiv.textContent = `❌ Incorrecto. La respuesta correcta es: ${item.meaning}`;
     feedbackDiv.style.color = 'red';
@@ -238,12 +241,11 @@ window.onload = () => {
     loadPracticeQuestion();
   }
 
-  // Asignar evento Enter al input
+  // Evento Enter: solo hace clic en "Verificar", la siguiente se carga automáticamente si es correcto
   const answerInput = document.getElementById('practiceAnswer');
   answerInput.addEventListener('keydown', function(event) {
     if(event.key === "Enter") {
-      document.getElementById('checkAnswerBtn').click(); // Simula clic en Verificar
-      loadPracticeQuestion(); // Carga el siguiente phrasal verb automáticamente
+      document.getElementById('checkAnswerBtn').click();
     }
   });
 };
