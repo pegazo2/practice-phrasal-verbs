@@ -168,6 +168,34 @@ window.onload = () => {
       speechSynthesis.speak(utter);
     }
 
+    // --- Verificar respuesta ---
+function checkAnswer(){
+  const answerInput = document.getElementById('practiceAnswer');
+  const feedbackDiv = document.getElementById('feedback');
+  const item = phrasalVerbsData[currentPracticeIndex];
+
+  // Reproducir el phrasal verb siempre
+  speak(item.pv);
+
+  if(answerInput.value.trim().toLowerCase() === item.meaning.toLowerCase()){
+    feedbackDiv.textContent = '✅ Correcto';
+    feedbackDiv.style.color = 'green';
+  } else {
+    feedbackDiv.textContent = `❌ Incorrecto. Significado: ${item.meaning}`;
+    feedbackDiv.style.color = 'red';
+  }
+}
+
+// --- Botón verificar ---
+document.getElementById('checkAnswerBtn').onclick = checkAnswer;
+
+// --- Enter para verificar ---
+document.getElementById('practiceAnswer').addEventListener('keydown', function(e){
+  if(e.key === 'Enter'){
+    checkAnswer();
+  }
+});
+
     // --- Render phrasal verbs ---
 function renderPhrasalVerbs(){
   const container = document.getElementById('phrasalVerbsContainer');
